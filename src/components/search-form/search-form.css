@@ -45,3 +45,7 @@
     opacity: 70%;
     color: #b4b4b4
 }
+
+.searchFormInput:focus {
+    outline: none;
+}

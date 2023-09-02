@@ -23,14 +23,13 @@ function App() {
     </div>
 
     <div className="App">
-      <br></br>
       <SearchForm search={searchCallback}></SearchForm>
-      <br></br>
       <SelectGenre
         genres={genres}
         activeGenres={activeGenres}
         setActiveGenres={setActiveGenres}
       ></SelectGenre>
+
       <br></br>
     </div >
   </>
