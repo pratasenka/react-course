@@ -1,0 +1,46 @@
+.selectGenre {
+    display: flex;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 90%;
+
+    font-family: Roboto;
+    font-size: 14px;
+
+    border-bottom: 1px #000000;
+    border-bottom-style: double;
+}
+
+.selectGenre a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+
+    border-bottom: 2px #555;
+    border-bottom-style: double;
+}
+
+.selectGenre a:hover {
+    border-bottom: 2px #ddd;
+    border-bottom-style: double;
+    color: white;
+}
+
+.selectGenre a.active {
+    border-bottom: 2px #f65261;
+    border-bottom-style: double;
+    color: white;
+}
+
+.selectGenre span {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+
+    border-bottom: 2px #555;
+    border-bottom-style: double;
+}
