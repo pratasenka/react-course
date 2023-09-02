@@ -16,6 +16,11 @@ function App() {
     console.log(searchText);
   }
 
+  const changeActiveGenresCallback = (activeGenres: string[]) => {
+    console.log(activeGenres);
+    setActiveGenres(activeGenres);
+  }
+
   return (<>
     <div className="App-header">
       <h1>Task 1</h1>
@@ -27,7 +32,7 @@ function App() {
       <SelectGenre
         genres={genres}
         activeGenres={activeGenres}
-        setActiveGenres={setActiveGenres}
+        setActiveGenres={changeActiveGenresCallback}
       ></SelectGenre>
 
       <br></br>
