@@ -2,7 +2,7 @@ import React from "react"
 import './input.css'
 
 
-export default function Input(props: any): React.ReactElement {
+export function Input(props: any): React.ReactElement {
     const _handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
             props.onEnter();
@@ -14,7 +14,5 @@ export default function Input(props: any): React.ReactElement {
         value={props.searchText ? props.searchText : ''}
         onChange={(e) => props.setSearchText(e.target.value)}
         onKeyDown={(e) => _handleKeyDown(e)}
-    >
-
-    </input >
+    />
 }

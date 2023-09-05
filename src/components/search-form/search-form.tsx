@@ -1,12 +1,12 @@
 import React from "react"
 import { useState } from "react"
 
-import Input from "../input/input"
-import Button from "../button/button"
+import { Input } from "../input/input"
+import { Button } from "../button/button"
 import "./search-form.css"
 
 
-export default function SearchForm(props: any): React.ReactElement {
+export function SearchForm(props: any): React.ReactElement {
     const [searchText, setSearchText] = useState('');
 
     const onSubmit = () => {
@@ -20,11 +20,11 @@ export default function SearchForm(props: any): React.ReactElement {
             searchText={searchText}
             setSearchText={setSearchText}
             onEnter={onSubmit}
-        ></Input>
+        />
         <Button
             className='searchFormButton'
             buttonText='SEARCH'
             onClick={onSubmit}
-        ></Button>
+        />
     </div>
 }

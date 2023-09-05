@@ -3,9 +3,9 @@ import { useState } from "react";
 
 import './App.css';
 
-import Counter from './components/counter/counter';
-import SearchForm from "./components/search-form/search-form";
-import SelectGenre from "./components/select-genre/select-genre";
+import { Counter } from './components/counter/counter';
+import { SearchForm } from "./components/search-form/search-form";
+import { SelectGenre } from "./components/select-genre/select-genre";
 
 const genres = ['ALL', 'DOCUMENTARY', 'COMEDY', 'HORROR', 'CRIME'];
 
@@ -22,21 +22,21 @@ function App() {
   }
 
   return (<>
-    <div className="App-header">
-      <h1>Task 1</h1>
-      <Counter></Counter>
-    </div>
-
     <div className="App">
-      <SearchForm search={searchCallback}></SearchForm>
-      <SelectGenre
-        genres={genres}
-        activeGenres={activeGenres}
-        setActiveGenres={changeActiveGenresCallback}
-      ></SelectGenre>
+      <div className="App-header">
+        <h1>Task 1</h1>
+        <Counter />
+      </div>
 
-      <br></br>
-    </div >
+      <div className="App-content">
+        <SearchForm search={searchCallback} />
+        <SelectGenre
+          genres={genres}
+          activeGenres={activeGenres}
+          setActiveGenres={changeActiveGenresCallback}
+        />
+      </div >
+    </div>
   </>
   );
 }

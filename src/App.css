@@ -1,6 +1,12 @@
 .App {
   text-align: center;
   background-color: #232323;
+  height: 100vh;
+}
+
+.App-content {
+  text-align: center;
+  background-color: #232323;
 }
 
 .App-header {
