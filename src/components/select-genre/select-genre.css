@@ -1,0 +1,40 @@
+.selectGenre {
+    display: flex;
+    margin: 0 auto;
+    width: 90%;
+
+    font-family: Roboto;
+    font-size: 14px;
+
+    border-bottom: 1px #000000;
+    border-bottom-style: double;
+}
+
+.selectGenre a {
+    color: #f2f2f2;
+    padding: 14px 16px;
+
+    border-bottom: 2px #555;
+    border-bottom-style: solid;
+}
+
+.selectGenre a:hover {
+    border-bottom: 2px #ddd;
+    border-bottom-style: solid;
+    color: white;
+    cursor: default;
+}
+
+.selectGenre a.active {
+    border-bottom: 2px #f65261;
+    border-bottom-style: solid;
+    color: white;
+}
+
+.selectGenre span {
+    width: 100%;
+    color: #f2f2f2;
+
+    border-bottom: 2px #555;
+    border-bottom-style: solid;
+}
