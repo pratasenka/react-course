@@ -1,20 +1,17 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   background-color: #232323;
   height: 100vh;
 }
 
 .App-content {
-  text-align: center;
-  background-color: #232323;
+  width: 90%;
 }
 
 .App-header {
-  background-color: #232323;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
