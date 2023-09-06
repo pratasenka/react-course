@@ -12,4 +12,11 @@ code {
     monospace;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+/* with crossorigin */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap'); */
+
+/* without crossorigin */
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto'), url(./fonts/roboto/Roboto-Regular.ttf) format('truetype');
+}
