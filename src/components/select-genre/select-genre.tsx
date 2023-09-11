@@ -7,6 +7,7 @@ export function SelectGenre(props: any): React.ReactElement {
         {props.genres?.map((genre: string) => {
             return <a
                 key={genre}
+                id={genre}
                 className={props.activeGenres.includes(genre) ? 'active' : ''}
                 onClick={() => props.setActiveGenres([genre])}
             >

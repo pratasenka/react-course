@@ -11,9 +11,11 @@ const genres = ['ALL', 'DOCUMENTARY', 'COMEDY', 'HORROR', 'CRIME'];
 
 function App() {
   const [activeGenres, setActiveGenres] = useState([genres[0]]);
+  const [searchText, setSearchText] = useState('');
 
   const searchCallback = (searchText: string) => {
     console.log(searchText);
+    setSearchText(searchText);
   }
 
   const changeActiveGenresCallback = (activeGenres: string[]) => {
@@ -25,11 +27,14 @@ function App() {
     <div className="App">
       <div className="App-header">
         <h1>Task 1</h1>
-        <Counter />
+        <Counter initValue={0} />
       </div>
 
       <div className="App-content">
-        <SearchForm search={searchCallback} />
+        <SearchForm
+          searchText={searchText}
+          search={searchCallback}
+        />
         <SelectGenre
           genres={genres}
           activeGenres={activeGenres}

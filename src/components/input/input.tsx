@@ -1,5 +1,4 @@
-import React from "react"
-import './input.css'
+import React from "react";
 
 
 export function Input(props: any): React.ReactElement {
@@ -9,6 +8,8 @@ export function Input(props: any): React.ReactElement {
         }
     }
     return <input
+        id={props.id}
+        aria-label={props.ariaLabel}
         className={props.className}
         placeholder={props.placeholder}
         value={props.searchText ? props.searchText : ''}
