@@ -1,9 +1,12 @@
 import React from "react";
 
-export class Counter extends React.Component<{}, { count: number }> {
+export class Counter extends React.Component<
+    { initValue: number },
+    { count: number }
+> {
     constructor(props: any) {
         super(props);
-        this.state = { count: 0 };
+        this.state = { count: props.initValue };
     }
 
     render(): React.ReactNode {
@@ -26,6 +29,7 @@ export class Counter extends React.Component<{}, { count: number }> {
             "button",
             {
                 key: btnName,
+                id: btnName,
                 style: this.getButtonStyle(),
                 onClick: () => callback(),
             },
@@ -37,7 +41,9 @@ export class Counter extends React.Component<{}, { count: number }> {
         return React.createElement(
             "span",
             {
-                key: "label",
+                key: "counterLabel",
+                id: "counterLabel",
+                'data-testid': "counterLabel",
                 style: this.getLabelStyle(),
             },
             initValue

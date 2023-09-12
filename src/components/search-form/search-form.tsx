@@ -7,7 +7,7 @@ import "./search-form.css"
 
 
 export function SearchForm(props: any): React.ReactElement {
-    const [searchText, setSearchText] = useState('');
+    const [searchText, setSearchText] = useState(props.searchText);
 
     const onSubmit = () => {
         props.search(searchText)
@@ -15,6 +15,8 @@ export function SearchForm(props: any): React.ReactElement {
 
     return <div className="searchForm">
         <Input
+            id='searchFormInput'
+            ariaLabel="searchFormInput"
             className='searchFormInput'
             placeholder='What do you want to watch?'
             searchText={searchText}
