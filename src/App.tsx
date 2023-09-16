@@ -3,9 +3,9 @@ import { useState } from "react";
 
 import './App.css';
 
-import { Counter } from './components/counter/counter';
 import { SearchForm } from "./components/search-form/search-form";
 import { SelectGenre } from "./components/select-genre/select-genre";
+import { Button } from "./components/button/button";
 
 const genres = ['ALL', 'DOCUMENTARY', 'COMEDY', 'HORROR', 'CRIME'];
 
@@ -25,21 +25,32 @@ function App() {
 
   return (<>
     <div className="App">
-      <div className="App-header">
-        <h1>Task 1</h1>
-        <Counter initValue={0} />
+      <div className="App-header App-header-background-image">
+        <div className="App-header-content App-header-background-blur">
+          <div className="App-header-company-name">
+            <span className="App-header-company-name-bold">netflix</span>
+            <span>roulette</span>
+
+          </div>
+          <Button>+ Add Movie</Button>
+          <div className="App-header-search">
+            <div>FIND YOUR MOVIE</div>
+            <SearchForm
+              searchText={searchText}
+              search={searchCallback}
+            />
+          </div>
+
+        </div>
       </div>
 
       <div className="App-content">
-        <SearchForm
-          searchText={searchText}
-          search={searchCallback}
-        />
-        <SelectGenre
+
+        {/* <SelectGenre
           genres={genres}
           activeGenres={activeGenres}
           setActiveGenres={changeActiveGenresCallback}
-        />
+        /> */}
       </div >
     </div>
   </>

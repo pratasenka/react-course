@@ -10,11 +10,59 @@
 }
 
 .App-header {
-  background-color: #232323;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   font-size: calc(10px + 2vmin);
   color: white;
+
+  height: 30vh;
+}
+
+.App-header-content {
+  position: static;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 30vh;
+  width: 100%;
+}
+
+.App-header-background-image {
+  background-image: url('../public/find-your-movie.background.jpg');
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.App-header-background-blur {
+  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.App-header-company-name {
+  display: flex;
+  text-align: left;
+  margin-top: 2vh;
+  margin-left: 5vh;
+  font-size: medium;
+  color: #f65261;
+}
+
+.App-header-company-name-bold {
+  font-weight: 800;
+}
+
+.App-header-search {
+  /* display: flex; */
+  width: 80%;
+  text-align: left;
+  margin: 0 auto;
+}
+
+.App-header-search-label {
+  /* display: flex; */
+  text-align: left;
 }

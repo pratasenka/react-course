@@ -8,7 +8,9 @@
     "test": "react-scripts test",
     "test-jest": "jest --All",
     "eject": "react-scripts eject",
-    "wdio": "wdio run ./wdio.conf.js"
+    "wdio": "wdio run ./wdio.conf.js",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -21,6 +23,15 @@
     "@babel/preset-typescript": "^7.22.15",
     "@babel/register": "^7.22.15",
     "@jest/globals": "^29.6.4",
+    "@storybook/addon-essentials": "^7.4.1",
+    "@storybook/addon-interactions": "^7.4.1",
+    "@storybook/addon-links": "^7.4.1",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.4.1",
+    "@storybook/preset-create-react-app": "^7.4.1",
+    "@storybook/react": "^7.4.1",
+    "@storybook/react-webpack5": "^7.4.1",
+    "@storybook/testing-library": "^0.2.0",
     "@testing-library/dom": "^9.3.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -33,16 +44,22 @@
     "@wdio/local-runner": "^8.16.6",
     "@wdio/mocha-framework": "^8.16.3",
     "@wdio/spec-reporter": "^8.16.3",
-    "jest": "^29.6.4",
+    "babel-plugin-named-exports-order": "^0.0.2",
     "chai": "^4.3.8",
+    "eslint-plugin-storybook": "^0.6.13",
+    "jest": "^29.6.4",
     "jest-environment-jsdom": "^29.6.4",
+    "prop-types": "^15.8.1",
+    "storybook": "^7.4.1",
     "ts-jest": "^29.1.1",
-    "wdio-wait-for": "^3.0.6"
+    "wdio-wait-for": "^3.0.6",
+    "webpack": "^5.88.2"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:storybook/recommended"
     ]
   },
   "browserslist": {

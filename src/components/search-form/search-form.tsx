@@ -27,6 +27,8 @@ export function SearchForm(props: any): React.ReactElement {
             className='searchFormButton'
             buttonText='SEARCH'
             onClick={onSubmit}
-        />
+        >
+            SEARCH
+        </Button>
     </div>
 }
