@@ -1,12 +1,10 @@
 .selectGenre {
     display: flex;
     margin: 0 auto;
-    width: 90%;
 
     font-family: Roboto;
     font-size: 14px;
 
-    /* background-color: #232323; */
     border-bottom: 1px #000000;
     border-bottom-style: double;
 }

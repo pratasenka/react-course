@@ -1,0 +1,45 @@
+.movie-item {
+    color: white;
+    margin: 0 auto;
+    margin-bottom: 2vh;
+    /* width: 40vh; */
+}
+
+.movie-item-image {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.movie-item-detail {
+    margin-top: 1vh;
+}
+
+.movie-item-detail-row {
+    margin-top: 1vh;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    justify-items: stretch;
+}
+
+.movie-item-name {
+    text-align: left;
+    opacity: 0.8;
+}
+
+.movie-item-release-date-right {
+    text-align: right;
+}
+
+.movie-item-release-date {
+    text-align: center;
+    padding: 5px 15px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    opacity: 0.8;
+}
+
+.movie-item-genre {
+    text-align: left;
+    font-size: small;
+    opacity: 0.6;
+}
