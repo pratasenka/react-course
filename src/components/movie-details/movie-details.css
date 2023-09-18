@@ -3,12 +3,10 @@
     margin: 0 auto;
     padding-top: 3vh;
     overflow: hidden;
-    border: 1px solid red;
 }
 
 .movie-details-image {
     width: 80%;
-    border: 1px solid red;
     border-radius: 5px;
 }
 
