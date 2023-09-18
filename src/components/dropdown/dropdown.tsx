@@ -11,7 +11,7 @@ export function Dropdown(props: any): React.ReactElement {
             <select name="example" id="example-custom" onChange={(e) => props.onClick(e.target.value)}>
                 <option value="">Custom select....</option>
                 {
-                    props.options.map((option: string) => {
+                    props.options?.map((option: string) => {
                         return <option
                             key={option}
                             value={option}
