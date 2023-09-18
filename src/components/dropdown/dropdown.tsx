@@ -7,7 +7,7 @@ import "./dropdown.css";
 export function Dropdown(props: any): React.ReactElement {
 
     return <div className="">
-        <div className="hex-select hex-select-js">
+        <div className="">
             <select name="example" id="example-custom" onChange={(e) => props.onClick(e.target.value)}>
                 <option value="">Custom select....</option>
                 {

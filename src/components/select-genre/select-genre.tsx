@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import "./select-genre.css"
 import { Dropdown } from "../dropdown/dropdown";
+import { MoviesSorting } from "../movies-sorting/movies-sorting";
 
 
 export function SelectGenre(props: any): React.ReactElement {
@@ -23,8 +24,7 @@ export function SelectGenre(props: any): React.ReactElement {
             </a>
         })}
         <span></span>
-        <span>SORT BY</span>
-        <Dropdown
+        <MoviesSorting
             options={props.sortOptions}
             onClick={props.sort}
         />
