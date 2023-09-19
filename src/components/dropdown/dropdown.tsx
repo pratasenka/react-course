@@ -8,7 +8,10 @@ export function Dropdown(props: any): React.ReactElement {
 
     return <div className="">
         <div className="">
-            <select name="example" id="example-custom" onChange={(e) => props.onClick(e.target.value)}>
+            <select 
+            name="example"
+            data-testid="MoviesSortingSelectDropdown" 
+            onChange={(e) => props.onClick(e.target.value)}>
                 <option value="">Custom select....</option>
                 {
                     props.options?.map((option: string) => {
