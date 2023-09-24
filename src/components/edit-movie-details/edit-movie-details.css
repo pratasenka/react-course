@@ -1,0 +1,76 @@
+.edit-movie-details {
+    width: 50vw;
+    max-width: 500px;
+    min-width: 300px;
+}
+
+.edit-movie-details-label {
+    font-weight: 500;
+    color: #F65261;
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.edit-movie-details-input {
+    background-color: #424242;
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+    padding: 0 10px;
+    color: white;
+}
+
+.edit-movie-details-input:placeholder {
+    color: #555555;
+}
+
+.edit-movie-details-input:focus {
+    outline: none;
+}
+
+
+.event-movie-details-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.event-movie-details-col-left {
+    width: 55%;
+}
+
+.event-movie-details-col-right {
+    width: 40%;
+}
+
+.event-movie-details-col-full {
+    width: 100%;
+}
+
+.event-movie-details-action-buttons {
+    display: flex;
+    justify-content: right;
+    margin-top: 5vh;
+    margin-bottom: 4vh;
+}
+
+.event-movie-details-reset-button {
+    height: 4vh;
+    width: 13vh;
+    border: 1px solid #F65261;
+    border-radius: 5px;
+    background-color: #232323;
+    color: #F65261;
+}
+
+.event-movie-details-submit-button {
+    margin-left: 1vh;
+    height: 4vh;
+    width: 13vh;
+    border: 1px solid #F65261;
+    border-radius: 5px;
+    background-color: #F65261;
+    color: white;
+}

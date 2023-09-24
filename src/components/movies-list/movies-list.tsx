@@ -1,5 +1,5 @@
 import React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import "./movies-list.css";
 import { MovieData } from "../../App"
@@ -22,6 +22,10 @@ export function MoviesList(props: any): React.ReactElement {
         else setMovies([...props.movies]);
     }
 
+    useEffect(() => {
+        setMovies([...props.movies])
+    }, [props.movies])
+
     return <>
         <SelectGenre
             genres={props.genres}
@@ -36,9 +40,8 @@ export function MoviesList(props: any): React.ReactElement {
         <div className="container">
             {
                 movies.map((movie: MovieData, index: number) => {
-                    console.log(`${index} ${movie.name} ${movie.releaseYear}`)
                     return <MovieItem
-                        key={`${index}${movie.name}${movie.releaseYear}`}
+                        key={`${movie.name} ${movie.releaseYear} - ${index}`}
                         movie={movie}
                         setMovieDetails={props.setMovieDetails}
                     />

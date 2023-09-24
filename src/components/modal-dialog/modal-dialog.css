@@ -1,0 +1,50 @@
+.dark-background {
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    overflow: hidden;
+}
+
+.modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: #232323;
+    color: white;
+}
+
+.modal-dialog-close {
+    display: flex;
+    justify-content: right;
+    margin-top: 1.2vh;
+    margin-right: 2vh;
+}
+
+.modal-dialog-close-button {
+    height: 30px;
+    width: 30px;
+    background: none;
+    color: white;
+    font-size: 30px;
+    border: none;
+}
+
+.modal-dialog-content {
+    margin: 0 5vh;
+}
+
+.modal-dialog-title {
+    font-size: 25px;
+}
+
+
+.modal-dialog-children {
+    margin-top: 30px;
+}
