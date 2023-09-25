@@ -41,7 +41,7 @@ export function MoviesList(props: any): React.ReactElement {
             {
                 movies.map((movie: MovieData) => {
                     return <MovieItem
-                        key={movie.id + 1}
+                        key={movie.id}
                         movie={movie}
                         edit={props.edit}
                         delete={props.delete}
