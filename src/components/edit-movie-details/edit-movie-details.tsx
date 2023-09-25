@@ -1,11 +1,12 @@
 import React from "react"
 import { useState } from "react"
+import { nanoid } from "nanoid";
 
 import "./edit-movie-details.css";
 import { LabeledInput } from "../input/labeled-input";
 import { Button } from "../button/button";
 import { MovieData } from "../../App";
-import { nanoid } from "nanoid";
+
 
 
 export function EditMovieDetails(props: any): React.ReactElement {
