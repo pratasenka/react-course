@@ -39,10 +39,12 @@ export function MoviesList(props: any): React.ReactElement {
         </div>
         <div className="container">
             {
-                movies.map((movie: MovieData, index: number) => {
+                movies.map((movie: MovieData) => {
                     return <MovieItem
-                        key={`${movie.name} ${movie.releaseYear} - ${index}`}
+                        key={movie.id + 1}
                         movie={movie}
+                        edit={props.edit}
+                        delete={props.delete}
                         setMovieDetails={props.setMovieDetails}
                     />
                 })

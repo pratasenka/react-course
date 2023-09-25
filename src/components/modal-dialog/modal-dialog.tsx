@@ -5,10 +5,13 @@ import "./modal-dialog.css";
 
 export function ModalDialog(props: any): React.ReactElement {
     return <>
-        <div className="dark-background centered">
+        <div className="dark-background">
             <div className="modal-dialog">
                 <div className="modal-dialog-close">
-                    <button className="modal-dialog-close-button">x</button>
+                    <button
+                        className="modal-dialog-close-button"
+                        onClick={() => props.close()}
+                    >x</button>
                 </div>
                 <div className="modal-dialog-content">
 

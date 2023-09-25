@@ -5,6 +5,7 @@ import "./edit-movie-details.css";
 import { LabeledInput } from "../input/labeled-input";
 import { Button } from "../button/button";
 import { MovieData } from "../../App";
+import { nanoid } from "nanoid";
 
 
 export function EditMovieDetails(props: any): React.ReactElement {
@@ -27,7 +28,9 @@ export function EditMovieDetails(props: any): React.ReactElement {
     }
 
     const triggerAction = () => {
+        console.log(title)
         props.action({
+            id: props.movie?.id || nanoid(),
             name: title,
             imageUrl: url,
             rating: rating,
@@ -37,7 +40,6 @@ export function EditMovieDetails(props: any): React.ReactElement {
             duration: runtime,
         } as MovieData)
     }
-
 
     return <>
         <div className="edit-movie-details">
@@ -94,7 +96,7 @@ export function EditMovieDetails(props: any): React.ReactElement {
                         movieDetailsElementId={'movie-details-genre'}
                         labelClassName='edit-movie-details-label'
                         inputClassName='edit-movie-details-input'
-                        value={genres}
+                        value={genres.join(',')}
                         onChange={setGenres}
                         placeholder='Select Genre' />
                 </div>
@@ -138,6 +140,5 @@ export function EditMovieDetails(props: any): React.ReactElement {
                 </Button>
             </div>
         </div>
-
     </>
 }

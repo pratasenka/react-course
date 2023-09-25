@@ -1,6 +1,8 @@
 .App {
   text-align: center;
+  height: 100vh;
   background-color: #232323;
+  overflow: auto;
 }
 
 .App-header {
@@ -12,12 +14,7 @@
   display: inline-block;
   width: 80%;
   margin-top: 1vh;
-}
-
-.App-footer {
-  /* display: inline-block; */
-  border: 1px solid #232323;
-  margin-top: 1vh;
+  background-color: #232323;
 }
 
 .heightX {
