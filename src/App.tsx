@@ -22,13 +22,6 @@ export interface MovieData {
   rating: string;
 }
 
-// interface ModalDialogParamsType {
-//   // active: boolean;
-//   // title?: string;
-//   // movie?: MovieData;
-//   // action?: any;
-// }
-
 const genres = ['ALL', 'DOCUMENTARY', 'COMEDY', 'HORROR', 'CRIME'];
 
 
@@ -53,7 +46,7 @@ function App() {
   const [movies, setMovies] = useState([...moviesArray]);
   const [activeGenres, setActiveGenres] = useState([genres[0]]);
   const [searchText, setSearchText] = useState('');
-  const [modalDialog, setModalDialog] = useState(<></>)
+  const [modalDialogParams, setModalDialogParams] = useState<any>(null);
   const [movieDetails, setMovieDetails] = useState(null as any);
 
   const searchCallback = (searchText: string) => {
@@ -69,19 +62,33 @@ function App() {
     else setMovieDetails(null as any)
   }
 
-  const modalDialogConfiguration = (title: string, component: any) => {
-    setModalDialog(
-      <ModalDialog
-        title={title}
-        close={() => setModalDialog(<></>)}
-      >
-        {component}
-      </ModalDialog>)
+  const modalDialogContentConfiguration = (params: any) => {
+    if (params.title === "ADD MOVIE") {
+      return <EditMovieDetails
+        action={addMovie}
+      />
+    }
+
+    if (params.title === "EDIT MOVIE") {
+      return <EditMovieDetails
+        movie={params.movie}
+        action={editMovie}
+      />
+    }
+
+    if (params.title === "DELETE MOVIE") {
+      return <DeleteMovie
+        movie={params.movie}
+        action={deleteMovie}
+      />
+    }
+
+    return <h3 style={{ padding: '30px' }}>Something went wrong...</h3>
   }
 
   const addMovie = (movie: MovieData) => {
     setMovies([...movies, movie]);
-    setModalDialog(<></>)
+    setModalDialogParams(null)
   }
 
   const editMovie = (movie: MovieData) => {
@@ -91,7 +98,7 @@ function App() {
       movie
     )
     setMovies([...movies]);
-    setModalDialog(<></>)
+    setModalDialogParams(null)
   }
 
   const deleteMovie = (movie: MovieData) => {
@@ -100,7 +107,7 @@ function App() {
       1
     )
     setMovies([...movies]);
-    setModalDialog(<></>)
+    setModalDialogParams(null)
   }
 
   return (<>
@@ -115,13 +122,7 @@ function App() {
           <HeaderSearch
             searchText={searchText}
             searchCallback={searchCallback}
-            setEditMovieDetails={() => {
-              modalDialogConfiguration(
-                "ADD MOVIE",
-                <EditMovieDetails
-                  action={addMovie}
-                />)
-            }}
+            setEditMovieDetails={() => setModalDialogParams({ title: 'ADD MOVIE', action: addMovie })}
           />
         }
       </div>
@@ -131,31 +132,22 @@ function App() {
           movies={movies}
           genres={genres}
           activeGenres={activeGenres}
-          edit={(movie: MovieData) => {
-            modalDialogConfiguration(
-              "EDIT MOVIE",
-              <EditMovieDetails
-                movie={movie}
-                action={editMovie}
-              />)
-          }}
-          delete={(movie: MovieData) => {
-            modalDialogConfiguration(
-              "DELETE MOVIE",
-              <DeleteMovie
-                movie={movie}
-                action={deleteMovie}
-              />)
-          }}
+          edit={(movie: MovieData) => setModalDialogParams({ title: 'EDIT MOVIE', movie: movie, action: editMovie })}
+          delete={(movie: MovieData) => setModalDialogParams({ title: 'DELETE MOVIE', movie: movie, action: deleteMovie })}
           setActiveGenres={changeActiveGenresCallback}
           setMovieDetails={updateMovieDetails}
         />
       </div >
     </div>
     {
-      modalDialog ?
+      modalDialogParams ?
         <Portal>
-          {modalDialog}
+          <ModalDialog
+            title={modalDialogParams.title}
+            close={() => setModalDialogParams(null)}
+          >
+            {modalDialogContentConfiguration(modalDialogParams)}
+          </ModalDialog>
         </Portal>
         : <></>
     }
