@@ -140,16 +140,15 @@ function App() {
       </div >
     </div>
     {
-      modalDialogParams ?
-        <Portal>
-          <ModalDialog
-            title={modalDialogParams.title}
-            close={() => setModalDialogParams(null)}
-          >
-            {modalDialogContentConfiguration(modalDialogParams)}
-          </ModalDialog>
-        </Portal>
-        : <></>
+      modalDialogParams &&
+      <Portal>
+        <ModalDialog
+          title={modalDialogParams.title}
+          close={() => setModalDialogParams(null)}
+        >
+          {modalDialogContentConfiguration(modalDialogParams)}
+        </ModalDialog>
+      </Portal>
     }
   </>
   );
