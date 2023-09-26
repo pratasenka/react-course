@@ -13,7 +13,7 @@ describe(SearchForm, () => {
         const { getByLabelText } = render(
             <SearchForm
                 searchText={searchText}
-                search={() => { }}
+                searchCallback={() => { }}
             />
         );
         expect(getByLabelText("searchFormInput").getAttribute('value')).toEqual(searchText)
@@ -25,7 +25,7 @@ describe(SearchForm, () => {
         const { getByLabelText, getByRole } = render(
             <SearchForm
                 searchText={''}
-                search={(newValue: string) => expectedResult = newValue}
+                searchCallback={(newValue: string) => expectedResult = newValue}
             />
         );
 
@@ -46,7 +46,7 @@ describe(SearchForm, () => {
         const { getByLabelText } = render(
             <SearchForm
                 searchText={''}
-                search={(newValue: string) => expectedResult = newValue}
+                searchCallback={(newValue: string) => expectedResult = newValue}
             />
         );
 

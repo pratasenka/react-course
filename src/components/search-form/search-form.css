@@ -1,13 +1,7 @@
 .searchForm {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-
-    width: 90%;
-    height: 40px;
+    width: 100%;
     margin: 0 auto;
-    padding: 30px;
 }
 
 .searchFormButton {
@@ -26,9 +20,9 @@
 }
 
 .searchFormInput {
-    width: 65%;
+    width: 80%;
     height: 50px;
-    margin: 0 10px;
+    margin-right: 10px;
     padding: 0 15px;
 
     border: none;

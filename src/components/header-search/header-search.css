@@ -1,0 +1,56 @@
+.header-search-background-image {
+    background-image: url('../../../public/find-your-movie.background.jpg');
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%
+}
+
+.content {
+    height: 32vh;
+    width: 100%;
+    padding: 1px;
+}
+
+.header-search-background-blur {
+    backdrop-filter: blur(2px);
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.header-search-company-name {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2vh;
+    margin-left: 7vh;
+    margin-right: 5vh;
+    font-size: medium;
+    color: #f65261;
+}
+
+.header-search-company-name-bold {
+    font-weight: 800;
+}
+
+.header-search-add-movie-button {
+    background-color: #555;
+    margin-right: 2vh;
+
+    height: 40px;
+    width: 15vh;
+
+    border-radius: 4px;
+    border: none;
+
+    background-color: rgba(85, 85, 85, 0.6);
+    color: #f65261;
+
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.header-search-search {
+    width: 80%;
+    text-align: left;
+    margin: 0 auto;
+}

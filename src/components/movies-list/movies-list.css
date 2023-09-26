@@ -1,0 +1,16 @@
+.container {
+    display: grid;
+    gap: 20px;
+
+
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    justify-items: stretch;
+    column-gap: 4vw;
+}
+
+.movies-count {
+    text-align: left;
+    margin: 2vh 1vh;
+    color: white;
+}

@@ -1,7 +1,6 @@
 .selectGenre {
     display: flex;
     margin: 0 auto;
-    width: 90%;
 
     font-family: Roboto;
     font-size: 14px;

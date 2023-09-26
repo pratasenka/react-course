@@ -1,0 +1,79 @@
+.movie-details {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 3vh;
+    overflow: hidden;
+}
+
+.movie-details-image {
+    width: 80%;
+    border-radius: 5px;
+}
+
+.movie-details-name {
+    margin-top: 5px;
+    font-size: calc(15px + 2vmin);
+    opacity: 0.9;
+}
+
+.movie-details-genre {
+    margin-top: 1vh;
+    font-size: calc(3px + 1vmin);
+    font-weight: 300;
+    opacity: 0.8;
+}
+
+.movie-details-release {
+    margin-top: 2vh;
+    font-size: calc(3px + 2vmin);
+    opacity: 0.9;
+    color: #f65261;
+}
+
+.movie-details-description {
+    text-align: left;
+    font-weight: 200;
+    margin-top: 2vh;
+    font-size: calc(3px + 2vmin);
+    opacity: 0.7;
+}
+
+.movie-details-number-circle {
+    width: 50px;
+    line-height: 50px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 20px;
+    border: 1px solid #666;
+    opacity: 0.9;
+}
+
+.movie-details-company-name {
+    display: flex;
+    justify-content: space-between;
+    /* margin-top: 2vh; */
+    font-size: medium;
+    color: #f65261;
+}
+
+.movie-details-company-name-bold {
+    font-weight: 800;
+    margin-left: 2vh;
+}
+
+.movie-details-search-movie-button {
+    background-color: #555;
+
+    height: 40px;
+    width: 15vh;
+
+    border-radius: 4px;
+    border: none;
+
+    background-color: rgba(85, 85, 85, 0.6);
+    color: #f65261;
+
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 600;
+}
