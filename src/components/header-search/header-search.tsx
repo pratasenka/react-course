@@ -13,7 +13,7 @@ export function HeaderSearch(props: any): React.ReactElement {
             <div className="content header-search-background-blur">
                 <div className="header-search-company-name">
                     <span><span className="header-search-company-name-bold">netflix</span>roulette</span>
-                    <Button className="header-search-add-movie-button">+ Add Movie</Button>
+                    <Button className="header-search-add-movie-button" onClick={() => props.setEditMovieDetails(true)}>+ Add Movie</Button>
                 </div>
 
                 <div className="header-search-search">

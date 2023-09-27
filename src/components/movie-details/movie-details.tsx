@@ -30,7 +30,6 @@ export function MovieDetails(props: any): React.ReactElement {
                         <div className="col span0 movie-details-name">
                             <span>{props.movie.name.toUpperCase()}</span>
                         </div>
-                        {/* <div className="col span"></div> */}
                         <div className="col space"></div>
                         <div className="col movie-details-number-circle">
                             {props.movie.rating}

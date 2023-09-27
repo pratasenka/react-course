@@ -1,16 +1,10 @@
 import { render, fireEvent } from "@testing-library/react";
-import { nanoid } from 'nanoid';
 
-
-import { MovieItem } from "./movie-item";
+import { DeleteMovie } from "./delete-movie";
 import { MovieData } from "../../App";
 
-jest.mock("nanoid", () => {
-    return { nanoid: () => "1234" };
-});
 
-
-describe(MovieItem, () => {
+describe(DeleteMovie, () => {
     const movie = {
         name: `Oppenheimer`,
         imageUrl: 'https://avatars.mds.yandex.net/get-kinopoisk-image/4486454/c5292109-642c-4ab0-894a-cc304e1bcec4/600x900',
@@ -21,19 +15,18 @@ describe(MovieItem, () => {
         rating: '8.8',
     };
 
-    it("should pass correct movie data in 'onClick' callback arguments after a click movie detail title on movie detail component", () => {
+    it("should pass correct movie data in 'action' callback arguments after a click CONFIRM button", () => {
         let clickResult = null;
         const { getByText } = render(
-            <MovieItem
+            <DeleteMovie
                 movie={movie}
-                setMovieDetails={(movieInfo: MovieData) => clickResult = movieInfo}
+                action={(movieInfo: MovieData) => clickResult = movieInfo}
             />
         );
 
-        const movieTitle = getByText(movie.name);
+        const movieTitle = getByText('CONFIRM');
         fireEvent.click(movieTitle);
 
         expect(JSON.stringify(clickResult)).toEqual(JSON.stringify(movie));
     });
 })
-
