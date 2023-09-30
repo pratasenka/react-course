@@ -38,7 +38,7 @@ export function MovieItem(props: any): React.ReactElement {
                 <div className="movie-item-detail-row">
                     <span className="movie-item-name">{props.movie.name}</span>
                     <div className="movie-item-release-date-right">
-                        <span className="movie-item-release-date">{props.movie.releaseYear}</span>
+                        <span className="movie-item-release-date">{props.movie.releaseYear.split('-')[0]}</span>
                     </div>
 
                 </div>

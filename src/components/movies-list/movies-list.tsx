@@ -2,25 +2,13 @@ import React from "react"
 import { useState, useEffect } from "react"
 
 import "./movies-list.css";
-import { MovieData } from "../../App"
+import { MovieData } from "../movie-list-page/movie-list-page";
 import { SelectGenre } from "../select-genre/select-genre";
 import { MovieItem } from "../movie-item/movie-item";
 
 
 export function MoviesList(props: any): React.ReactElement {
     const [movies, setMovies] = useState([...props.movies]);
-
-    const sortOptions = [
-        { sortName: 'Title', strategy: (a: MovieData, b: MovieData) => a.name.localeCompare(b.name) },
-        { sortName: 'Release Date', strategy: (a: MovieData, b: MovieData) => a.releaseYear - b.releaseYear }
-    ]
-
-    const movieSorting = (option: string) => {
-        const sortOption = sortOptions.find(sortOption => sortOption.sortName === option);
-
-        if (sortOption) setMovies([...movies.sort(sortOption.strategy)]);
-        else setMovies([...props.movies]);
-    }
 
     useEffect(() => {
         setMovies([...props.movies])
@@ -31,8 +19,7 @@ export function MoviesList(props: any): React.ReactElement {
             genres={props.genres}
             activeGenres={props.activeGenres}
             setActiveGenres={props.setActiveGenres}
-            sortOptions={sortOptions.map(sortOption => sortOption.sortName)}
-            sort={movieSorting}
+            setSortBy={props.setSortBy}
         />
         <div className="movies-count">
             <span><b>{movies.length}</b> movies found</span>
