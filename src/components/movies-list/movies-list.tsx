@@ -22,7 +22,7 @@ export function MoviesList(props: any): React.ReactElement {
             setSortBy={props.setSortBy}
         />
         <div className="movies-count">
-            <span><b>{movies.length}</b> movies found</span>
+            <span data-testid="moviesCountLabel"><b>{movies.length}</b> movies found</span>
         </div>
         <div className="container">
             {

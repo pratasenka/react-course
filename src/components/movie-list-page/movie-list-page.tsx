@@ -50,6 +50,7 @@ export default function MovieListPage() {
     const [movieDetails, setMovieDetails] = useState(null as any);
 
     const fetchMoviesData = () => {
+        console.log(`http://localhost:4000/movies?sortBy=${sortBy}&sortOrder=asc&search=${searchText}&searchBy=title&filter=${activeGenres.length === genres.length ? '' : activeGenres.join(',')}`)
         fetch(decodeURIComponent(`http://localhost:4000/movies?sortBy=${sortBy}&sortOrder=asc&search=${searchText}&searchBy=title&filter=${activeGenres.length === genres.length ? '' : activeGenres.join(',')}`))
             .then(response => {
                 return response.json()
