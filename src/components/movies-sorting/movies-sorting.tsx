@@ -5,9 +5,7 @@ import "./movies-sorting.css";
 import { Dropdown } from "../dropdown/dropdown";
 
 export function MoviesSorting(props: any): React.ReactElement {
-
-
-    const sortOptions = ['Title', 'Release Date'];
+    const SORT_OPTIONS = ['Title', 'Release Date'];
 
     const onChangeSort = (option: string) => {
         if (option === 'Title') {
@@ -27,7 +25,7 @@ export function MoviesSorting(props: any): React.ReactElement {
         <div className="movies-sorting ">
             <span>SORTBY</span>
             <Dropdown
-                options={sortOptions}
+                options={SORT_OPTIONS}
                 onClick={onChangeSort}
             />
         </div>

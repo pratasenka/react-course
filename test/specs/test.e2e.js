@@ -66,14 +66,14 @@ describe('App', async () => {
     });
 
     it('should click on movie and show movie details', async () => {
-        const movieName = 'Black Panther';
+        const movieTitle = await $(`span[class="movie-item-name"]`);
 
-        const movieTitle = await $(`span[id="movie-item-name-${movieName}"]`);
+        const title = await movieTitle.getText();
         await movieTitle.click();
 
         const movieDetailsName = await $('span[id="movie-details-name"]');
 
-        expect(await movieDetailsName.getText()).toBe(movieName.toUpperCase());
+        expect(await movieDetailsName.getText()).toBe(title.toUpperCase());
     });
 })
 
