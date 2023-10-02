@@ -53,7 +53,7 @@ export default function MovieListPage() {
 
     const fetchMoviesData = (signal: any) => {
         fetch(
-            decodeURIComponent(`http://localhost:4000/movies?sortBy=${sortBy}&sortOrder=asc&search=${searchText}&searchBy=title&limit=1000&filter=${activeGenres.length === genres.length ? '' : activeGenres.join(',')}`),
+            decodeURIComponent(`http://localhost:4000/movies?sortBy=${sortBy}&sortOrder=asc&search=${searchText}&searchBy=title&filter=${activeGenres.length === genres.length ? '' : activeGenres.join(',')}`),
             { signal }
         )
             .then(response => {
