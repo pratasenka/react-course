@@ -60,7 +60,6 @@ describe('App', async () => {
         await genre.click();
         await browser.pause();
 
-        console.log(mock.calls.length)
         expect(mock.calls[0].url).toBe(
             "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=&searchBy=title&filter=Documentary"
         );

@@ -60,7 +60,6 @@ export default function MovieListPage() {
                 return response.json()
             })
             .then(parsedResponse => {
-                console.log(parsedResponse.data)
                 setMovies(parsedResponse.data.map((movie: any): MovieData => {
                     return {
                         id: movie.id,

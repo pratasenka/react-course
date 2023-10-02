@@ -29,7 +29,6 @@ export function EditMovieDetails(props: any): React.ReactElement {
     }
 
     const triggerAction = () => {
-        console.log(title)
         props.action({
             id: props.movie?.id || nanoid(),
             name: title,
