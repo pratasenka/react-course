@@ -64,5 +64,16 @@ describe('App', async () => {
             "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=&searchBy=title&filter=Documentary"
         );
     });
+
+    it('should click on movie and show movie details', async () => {
+        const movieName = 'Black Panther';
+
+        const movieTitle = await $(`span[id="movie-item-name-${movieName}"]`);
+        await movieTitle.click();
+
+        const movieDetailsName = await $('span[id="movie-details-name"]');
+
+        expect(await movieDetailsName.getText()).toBe(movieName.toUpperCase());
+    });
 })
 
