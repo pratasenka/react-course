@@ -49,9 +49,13 @@ export default function MovieListPage() {
     const [modalDialogParams, setModalDialogParams] = useState<any>(null);
     const [movieDetails, setMovieDetails] = useState(null as any);
 
-    const fetchMoviesData = () => {
-        console.log(`http://localhost:4000/movies?sortBy=${sortBy}&sortOrder=asc&search=${searchText}&searchBy=title&filter=${activeGenres.length === genres.length ? '' : activeGenres.join(',')}`)
-        fetch(decodeURIComponent(`http://localhost:4000/movies?sortBy=${sortBy}&sortOrder=asc&search=${searchText}&searchBy=title&filter=${activeGenres.length === genres.length ? '' : activeGenres.join(',')}`))
+
+
+    const fetchMoviesData = (signal: any) => {
+        fetch(
+            decodeURIComponent(`http://localhost:4000/movies?sortBy=${sortBy}&sortOrder=asc&search=${searchText}&searchBy=title&limit=1000&filter=${activeGenres.length === genres.length ? '' : activeGenres.join(',')}`),
+            { signal }
+        )
             .then(response => {
                 return response.json()
             })
@@ -70,111 +74,121 @@ export default function MovieListPage() {
                     }
                 }))
             })
-    }
-
-    useEffect(() => {
-        fetchMoviesData();
-    }, [activeGenres, searchText, sortBy]);
-
-    const modalDialogContentConfiguration = (params: any) => {
-        if (params.title === "ADD MOVIE") {
-            return <EditMovieDetails
-                action={addMovie}
-            />
-        }
-
-        if (params.title === "EDIT MOVIE") {
-            return <EditMovieDetails
-                movie={params.movie}
-                action={editMovie}
-            />
-        }
-
-        if (params.title === "DELETE MOVIE") {
-            return <DeleteMovie
-                movie={params.movie}
-                action={deleteMovie}
-            />
-        }
-
-        return <h3 style={{ padding: '30px' }}>Something went wrong...</h3>
-    }
-
-    const changeActiveGenresCallback = (activeGenres: string[]) => {
-        setActiveGenres(activeGenres);
-    }
-
-    const updateMovieDetails = (movie?: MovieData) => {
-        if (movie) setMovieDetails(movie);
-        else setMovieDetails(null as any)
-    }
-
-    const addMovie = (movie: MovieData) => {
-        setMovies([...movies, movie]);
-        setModalDialogParams(null)
-    }
-
-    const editMovie = (movie: MovieData) => {
-        movies.splice(
-            movies.findIndex(oldMovie => oldMovie.id === movie.id),
-            1,
-            movie
-        )
-        setMovies([...movies]);
-        setModalDialogParams(null)
-    }
-
-    const deleteMovie = (movie: MovieData) => {
-        movies.splice(
-            movies.findIndex(oldMovie => oldMovie.id === movie.id),
-            1
-        )
-        setMovies([...movies]);
-        setModalDialogParams(null)
-    }
-
-    return (<>
-        <div className="App">
-            <div className="App-header">
-                {movieDetails ?
-                    <MovieDetails
-                        movie={movieDetails}
-                        backToSearch={updateMovieDetails}
-                    />
-                    :
-                    <HeaderSearch
-                        searchText={searchText}
-                        searchCallback={(searchText: string) => setSearchText(searchText)}
-                        setEditMovieDetails={() => setModalDialogParams({ title: 'ADD MOVIE', action: addMovie })}
-                    />
+            .catch(error => {
+                if (error.name === 'AbortError') {
+                    console.log('Request Aborted!')
+                    return;
                 }
-            </div>
-
-            <div className="App-content">
-                <MoviesList
-                    movies={movies}
-                    genres={genres}
-                    activeGenres={activeGenres}
-                    edit={(movie: MovieData) => setModalDialogParams({ title: 'EDIT MOVIE', movie: movie, action: editMovie })}
-                    delete={(movie: MovieData) => setModalDialogParams({ title: 'DELETE MOVIE', movie: movie, action: deleteMovie })}
-                    setActiveGenres={changeActiveGenresCallback}
-                    setMovieDetails={updateMovieDetails}
-                    setSortBy={setSortBy}
-                />
-            </div >
-        </div>
-        {
-            modalDialogParams &&
-            <Portal>
-                <ModalDialog
-                    title={modalDialogParams.title}
-                    close={() => setModalDialogParams(null)}
-                >
-                    {modalDialogContentConfiguration(modalDialogParams)}
-                </ModalDialog>
-            </Portal>
+            })
         }
-    </>
-    );
-}
+
+        useEffect(() => {
+            const abortController = new AbortController();
+
+            fetchMoviesData(abortController.signal);
+
+            return () => abortController.abort();
+        }, [activeGenres, searchText, sortBy]);
+
+        const modalDialogContentConfiguration = (params: any) => {
+            if (params.title === "ADD MOVIE") {
+                return <EditMovieDetails
+                    action={addMovie}
+                />
+            }
+
+            if (params.title === "EDIT MOVIE") {
+                return <EditMovieDetails
+                    movie={params.movie}
+                    action={editMovie}
+                />
+            }
+
+            if (params.title === "DELETE MOVIE") {
+                return <DeleteMovie
+                    movie={params.movie}
+                    action={deleteMovie}
+                />
+            }
+
+            return <h3 style={{ padding: '30px' }}>Something went wrong...</h3>
+        }
+
+        const changeActiveGenresCallback = (activeGenres: string[]) => {
+            setActiveGenres(activeGenres);
+        }
+
+        const updateMovieDetails = (movie?: MovieData) => {
+            if (movie) setMovieDetails(movie);
+            else setMovieDetails(null as any)
+        }
+
+        const addMovie = (movie: MovieData) => {
+            setMovies([...movies, movie]);
+            setModalDialogParams(null)
+        }
+
+        const editMovie = (movie: MovieData) => {
+            movies.splice(
+                movies.findIndex(oldMovie => oldMovie.id === movie.id),
+                1,
+                movie
+            )
+            setMovies([...movies]);
+            setModalDialogParams(null)
+        }
+
+        const deleteMovie = (movie: MovieData) => {
+            movies.splice(
+                movies.findIndex(oldMovie => oldMovie.id === movie.id),
+                1
+            )
+            setMovies([...movies]);
+            setModalDialogParams(null)
+        }
+
+        return (<>
+            <div className="App">
+                <div className="App-header">
+                    {movieDetails ?
+                        <MovieDetails
+                            movie={movieDetails}
+                            backToSearch={updateMovieDetails}
+                        />
+                        :
+                        <HeaderSearch
+                            searchText={searchText}
+                            searchCallback={(searchText: string) => setSearchText(searchText)}
+                            setEditMovieDetails={() => setModalDialogParams({ title: 'ADD MOVIE', action: addMovie })}
+                        />
+                    }
+                </div>
+
+                <div className="App-content">
+                    <MoviesList
+                        movies={movies}
+                        genres={genres}
+                        activeGenres={activeGenres}
+                        edit={(movie: MovieData) => setModalDialogParams({ title: 'EDIT MOVIE', movie: movie, action: editMovie })}
+                        delete={(movie: MovieData) => setModalDialogParams({ title: 'DELETE MOVIE', movie: movie, action: deleteMovie })}
+                        setActiveGenres={changeActiveGenresCallback}
+                        setMovieDetails={updateMovieDetails}
+                        setSortBy={setSortBy}
+                    />
+                </div >
+            </div>
+            {
+                modalDialogParams &&
+                <Portal>
+                    <ModalDialog
+                        title={modalDialogParams.title}
+                        close={() => setModalDialogParams(null)}
+                    >
+                        {modalDialogContentConfiguration(modalDialogParams)}
+                    </ModalDialog>
+                </Portal>
+            }
+        </>
+        );
+    }
 
