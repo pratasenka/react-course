@@ -3,6 +3,12 @@ import { useState } from "react"
 
 import "./dropdown.css";
 
+export interface DropdownOption {
+    id: string;
+    name: string;
+    value: string;
+}
+
 
 export function Dropdown(props: any): React.ReactElement {
 
@@ -14,12 +20,12 @@ export function Dropdown(props: any): React.ReactElement {
             onChange={(e) => props.onClick(e.target.value)}>
                 <option value="">Custom select....</option>
                 {
-                    props.options?.map((option: string) => {
+                    props.options?.map((option: DropdownOption) => {
                         return <option
-                            key={option}
-                            value={option}
+                            key={option.id}
+                            value={option.value}
                         >
-                            {option}
+                            {option.name}
                         </option>
                     })
                 }

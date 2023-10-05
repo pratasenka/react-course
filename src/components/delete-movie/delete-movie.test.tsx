@@ -1,7 +1,7 @@
 import { render, fireEvent } from "@testing-library/react";
 
 import { DeleteMovie } from "./delete-movie";
-import { MovieData } from "../../App";
+import { MovieData } from "../movie-list-page/movie-list-page";
 
 
 describe(DeleteMovie, () => {

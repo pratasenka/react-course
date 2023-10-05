@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import "./edit-movie-details.css";
 import { LabeledInput } from "../input/labeled-input";
 import { Button } from "../button/button";
-import { MovieData } from "../../App";
+import { MovieData } from "../movie-list-page/movie-list-page";
 
 
 
@@ -29,7 +29,6 @@ export function EditMovieDetails(props: any): React.ReactElement {
     }
 
     const triggerAction = () => {
-        console.log(title)
         props.action({
             id: props.movie?.id || nanoid(),
             name: title,

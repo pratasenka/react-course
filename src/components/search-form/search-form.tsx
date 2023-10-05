@@ -26,6 +26,7 @@ export function SearchForm(props: any): React.ReactElement {
                 onEnter={onSubmit}
             />
             <Button
+                id='searchFormButton'
                 className='searchFormButton'
                 onClick={onSubmit}
             >

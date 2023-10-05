@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { render, fireEvent } from "@testing-library/react";
 
 import { EditMovieDetails } from "./edit-movie-details";
-import { MovieData } from "../../App";
+import { MovieData } from "../movie-list-page/movie-list-page";
 
 
 

@@ -1,64 +1,79 @@
 const { expect, browser, $ } = require('@wdio/globals');
+import { Key } from 'webdriverio';
 const chai = require('chai');
 
-describe('Counter', async () => {
-    const clickCount = 10;
-
+describe('App', async () => {
     beforeEach(async () => {
-        await browser.url(`http://localhost:3000`)
+        await browser.url(`http://localhost:3000`);
     })
 
-    it('should be displayed increase button', async () => {
-        const increaseButton = await $('button[id="+"]');
-        await expect(increaseButton).toBeDisplayed();
-    });
-
-    it('should be displayed decrease button', async () => {
-        const decreaseButton = await $('button[id="-"]');
-        await expect(decreaseButton).toBeDisplayed();
+    afterEach(async () => {
+        await browser.mockRestoreAll();
     })
 
-    it('should be displayed counter label', async () => {
-        const counterLabel = await $('span[data-testid="counterLabel"]');
-        await expect(counterLabel).toBeDisplayed();
-    })
+    it('should call fetch to correct url after serach ENTER press', async () => {
+        const mock = await browser.mock('http://localhost:4000/**');
+        const searchInput = await $('input[id="searchFormInput"]');
 
-    it('should increase counter label by clickCount times', async () => {
-        const increaseButton = await $('button[id="+"]');
+        await searchInput.click()
+        await searchInput.addValue("Thor");
+        await browser.keys(Key.Enter);
+        await browser.pause();
 
-        for (let i = 0; i < clickCount; i++) {
-            await increaseButton.click()
-        }
-
-        const counterLabel = await $('span[data-testid="counterLabel"]');
-        chai.expect(await counterLabel.getText()).to.equal(String(clickCount));
+        expect(mock.calls.length).toBe(1);
+        expect(mock.calls[0].url).toBe(
+            "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=Thor&searchBy=title&filter="
+        );
     });
 
-    it('should decrease counter label by clickCount times', async () => {
-        const decreaseButton = await $('button[id="-"]');
+    it('should call fetch to correct url after serach button press', async () => {
+        const mock = await browser.mock('http://localhost:4000/**');
+        const searchInput = await $('input[id="searchFormInput"]');
+        const searchButton = await $('button[id="searchFormButton"]');
 
-        for (let i = 0; i < clickCount; i++) {
-            await decreaseButton.click()
-        }
+        await searchInput.click()
+        await searchInput.addValue("Thor");
+        await searchButton.click();
+        await browser.pause();
 
-        const counterLabel = await $('span[data-testid="counterLabel"]');
-        chai.expect(await counterLabel.getText()).to.equal(String(clickCount * -1));
+        expect(mock.calls.length).toBe(1);
+        expect(mock.calls[0].url).toBe(
+            "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=Thor&searchBy=title&filter="
+        );
     });
 
-    it('should increase and decrease counter label by clickCount for both operations times', async () => {
-        const increaseButton = await $('button[id="+"]');
-        const decreaseButton = await $('button[id="-"]');
+    it('should call fetch to correct url after sort option selection', async () => {
+        const mock = await browser.mock('http://localhost:4000/**');
+        await browser.pause();
+        const sortDropdown = await $('select[data-testid="MoviesSortingSelectDropdown"]');
+        await sortDropdown.selectByAttribute('value', 'Title');
+        await browser.pause();
 
-        for (let i = 0; i < clickCount; i++) {
-            await increaseButton.click()
-        }
+        expect(mock.calls[0].url).toBe(
+            "http://localhost:4000/movies?sortBy=title&sortOrder=asc&search=&searchBy=title&filter="
+        );
+    });
 
-        for (let i = 0; i < clickCount; i++) {
-            await decreaseButton.click()
-        }
+    it('should call fetch to correct url after genre selection', async () => {
+        const mock = await browser.mock('http://localhost:4000/**')
+        const genre = await $('a[id="Documentary-genre-item"]');
+        await genre.click();
+        await browser.pause();
 
-        const counterLabel = await $('span[data-testid="counterLabel"]');
-        chai.expect(await counterLabel.getText()).to.equal(String(0));
+        expect(mock.calls[0].url).toBe(
+            "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=&searchBy=title&filter=Documentary"
+        );
+    });
+
+    it('should click on movie and show movie details', async () => {
+        const movieTitle = await $(`span[class="movie-item-name"]`);
+
+        const title = await movieTitle.getText();
+        await movieTitle.click();
+
+        const movieDetailsName = await $('span[id="movie-details-name"]');
+
+        expect(await movieDetailsName.getText()).toBe(title.toUpperCase());
     });
 })
 

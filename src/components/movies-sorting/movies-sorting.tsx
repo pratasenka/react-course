@@ -2,17 +2,28 @@ import React from "react"
 import { useState } from "react"
 
 import "./movies-sorting.css";
-import { Dropdown } from "../dropdown/dropdown";
+import { Dropdown, DropdownOption } from "../dropdown/dropdown";
 
 export function MoviesSorting(props: any): React.ReactElement {
-
+    const SORT_OPTIONS: DropdownOption[] = [
+        {
+            id: '1',
+            name: 'Title',
+            value: 'title',
+        },
+        {
+            id: '2',
+            name: 'Release Date',
+            value: 'release_date',
+        }
+    ];
 
     return <>
         <div className="movies-sorting ">
             <span>SORTBY</span>
             <Dropdown
-                options={props.options}
-                onClick={props.onClick}
+                options={SORT_OPTIONS}
+                onClick={props.setSortBy}
             />
         </div>
     </>
