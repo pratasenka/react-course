@@ -24,6 +24,7 @@ describe('App', async () => {
         expect(mock.calls[0].url).toBe(
             "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=Thor&searchBy=title&filter="
         );
+        expect(await browser.getUrl()).toBe('http://localhost:3000/?query=Thor');
     });
 
     it('should call fetch to correct url after serach button press', async () => {
@@ -40,18 +41,20 @@ describe('App', async () => {
         expect(mock.calls[0].url).toBe(
             "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=Thor&searchBy=title&filter="
         );
+        expect(await browser.getUrl()).toBe('http://localhost:3000/?query=Thor');
     });
 
     it('should call fetch to correct url after sort option selection', async () => {
         const mock = await browser.mock('http://localhost:4000/**');
         await browser.pause();
         const sortDropdown = await $('select[data-testid="MoviesSortingSelectDropdown"]');
-        await sortDropdown.selectByAttribute('value', 'Title');
+        await sortDropdown.selectByAttribute('value', 'title');
         await browser.pause();
 
         expect(mock.calls[0].url).toBe(
             "http://localhost:4000/movies?sortBy=title&sortOrder=asc&search=&searchBy=title&filter="
         );
+        expect(await browser.getUrl()).toBe('http://localhost:3000/?sortBy=title');
     });
 
     it('should call fetch to correct url after genre selection', async () => {
@@ -63,6 +66,7 @@ describe('App', async () => {
         expect(mock.calls[0].url).toBe(
             "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=&searchBy=title&filter=Documentary"
         );
+        expect(await browser.getUrl()).toBe('http://localhost:3000/?genre=Documentary');
     });
 
     it('should click on movie and show movie details', async () => {
@@ -74,6 +78,7 @@ describe('App', async () => {
         const movieDetailsName = await $('span[id="movie-details-name"]');
 
         expect(await movieDetailsName.getText()).toBe(title.toUpperCase());
+        expect(await browser.getUrl()).toBe('http://localhost:3000/337167');
     });
 })
 

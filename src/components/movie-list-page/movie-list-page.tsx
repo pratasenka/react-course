@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
 import { useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { MoviesList } from "../movies-list/movies-list";
 import { HeaderSearch } from "../header-search/header-search";
@@ -9,7 +10,8 @@ import { EditMovieDetails } from "../edit-movie-details/edit-movie-details";
 import { ModalDialog } from "../modal-dialog/modal-dialog";
 import { nanoid } from "nanoid";
 import { DeleteMovie } from "../delete-movie/delete-movie";
-import { constructUrl } from "../../utils";
+import { constructUrl, filterSearchParams } from "../../utils";
+
 
 export interface MovieData {
     id: string;
@@ -42,14 +44,18 @@ const genres = ['Documentary', 'Comedy', 'Horror', 'Crime'];
 
 
 
-export default function MovieListPage() {
+export default function MovieListPage(props: any) {
+    const navigate = useNavigate()
+
+    const { movieId } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [movies, setMovies] = useState<MovieData[]>([]);
-    const [sortBy, setSortBy] = useState('');
-    const [activeGenres, setActiveGenres] = useState<string[]>([...genres]);
-    const [searchText, setSearchText] = useState('');
+    const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || '');
+    const [activeGenres, setActiveGenres] = useState<string[]>(searchParams.get('genre')?.split(',') || []);
+    const [searchText, setSearchText] = useState(searchParams.get('query') || '');
     const [modalDialogParams, setModalDialogParams] = useState<any>(null);
     const [movieDetails, setMovieDetails] = useState(null as any);
-
 
 
     const fetchMoviesData = (signal: any) => {
@@ -67,7 +73,7 @@ export default function MovieListPage() {
             { signal }
         )
             .then(response => {
-                return response.json()
+                return response.json();
             })
             .then(parsedResponse => {
                 return parsedResponse.data.map((movie: any): MovieData => {
@@ -81,10 +87,41 @@ export default function MovieListPage() {
                         description: movie.overview,
                         rating: movie.vote_average,
                     }
-                })
+                });
             })
             .then(transformedData => {
-                setMovies(transformedData)
+                setMovies(transformedData);
+            })
+            .catch(error => {
+                if (error.name === 'AbortError') {
+                    console.log('Request Aborted!')
+                    return;
+                }
+            })
+    }
+
+    const fetchMovieData = (movieId: string, signal: any) => {
+        fetch(
+            `http://localhost:4000/movies/${movieId}`,
+            { signal }
+        )
+            .then(response => {
+                return response.json()
+            })
+            .then(parsedMovie => {
+                return {
+                    id: parsedMovie.id,
+                    name: parsedMovie.title,
+                    imageUrl: parsedMovie.poster_path,
+                    releaseYear: parsedMovie.release_date,
+                    duration: parsedMovie.runtime,
+                    relevantGenres: parsedMovie.genres,
+                    description: parsedMovie.overview,
+                    rating: parsedMovie.vote_average,
+                }
+            })
+            .then(transformedMovieData => {
+                setMovieDetails(transformedMovieData);
             })
             .catch(error => {
                 if (error.name === 'AbortError') {
@@ -97,10 +134,20 @@ export default function MovieListPage() {
     useEffect(() => {
         const abortController = new AbortController();
 
+        if (movieId) fetchMovieData(movieId, abortController.signal);
         fetchMoviesData(abortController.signal);
 
+        setSearchParams(
+            filterSearchParams({
+                query: searchText,
+                genre: activeGenres.join(','),
+                sortBy: sortBy,
+            })
+        );
+
+
         return () => abortController.abort();
-    }, [activeGenres, searchText, sortBy]);
+    }, [activeGenres, searchText, sortBy, movieId]);
 
     const modalDialogContentConfiguration = (params: any) => {
         if (params.title === "ADD MOVIE") {
@@ -127,12 +174,22 @@ export default function MovieListPage() {
     }
 
     const changeActiveGenresCallback = (activeGenres: string[]) => {
-        setActiveGenres(activeGenres);
+        setActiveGenres(activeGenres.length === genres.length ? [] : activeGenres);
     }
 
     const updateMovieDetails = (movie?: MovieData) => {
+
+        navigate(`/${movie ? movie.id : ''}`)
         if (movie) setMovieDetails(movie);
         else setMovieDetails(null as any)
+        // if (movie) {
+        //     setMovieDetails(movie);
+        //     navigate(`/${movie.id}`)
+        // }
+        // else {
+        //     setMovieDetails(null as any)
+        //     navigate('/')
+        // }
     }
 
     const addMovie = (movie: MovieData) => {
@@ -185,6 +242,7 @@ export default function MovieListPage() {
                     delete={(movie: MovieData) => setModalDialogParams({ title: 'DELETE MOVIE', movie: movie, action: deleteMovie })}
                     setActiveGenres={changeActiveGenresCallback}
                     setMovieDetails={updateMovieDetails}
+                    sortBy={sortBy}
                     setSortBy={setSortBy}
                 />
             </div >

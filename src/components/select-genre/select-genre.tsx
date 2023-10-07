@@ -57,7 +57,7 @@ export function SelectGenre(props: any): React.ReactElement {
         }
         <span></span>
         <MoviesSorting
-            options={props.sortOptions}
+            sortBy={props.sortBy}
             setSortBy={props.setSortBy}
         />
     </div>
