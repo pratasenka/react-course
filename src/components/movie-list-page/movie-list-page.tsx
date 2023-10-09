@@ -8,9 +8,9 @@ import { MovieDetails } from "../movie-details/movie-details";
 import { Portal } from "../portal/portal";
 import { EditMovieDetails } from "../edit-movie-details/edit-movie-details";
 import { ModalDialog } from "../modal-dialog/modal-dialog";
-import { nanoid } from "nanoid";
 import { DeleteMovie } from "../delete-movie/delete-movie";
 import { constructUrl, filterSearchParams } from "../../utils";
+import { request } from '../../requests';
 
 
 export interface MovieData {
@@ -27,23 +27,6 @@ export interface MovieData {
 const genres = ['Documentary', 'Comedy', 'Horror', 'Crime'];
 
 
-// const moviesArray: MovieData[] = [];
-
-// for (let i = 0; i < 1; ++i) {
-//     moviesArray.push({
-//         id: nanoid(),
-//         name: `Oppenheimer ${20 - i}`,
-//         imageUrl: 'https://avatars.mds.yandex.net/get-kinopoisk-image/4486454/c5292109-642c-4ab0-894a-cc304e1bcec4/600x900',
-//         releaseYear: 2025 + (-2 ^ i),
-//         duration: '3h 10min',
-//         relevantGenres: ['DOCUMENTARY', 'HORROR'],
-//         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean turpis turpis, mollis ut cursus ac, ultricies sed odio. Duis eleifend elit quam, sed gravida odio pharetra in. Quisque quam est, condimentum nec turpis id, auctor vulputate dui. Vivamus tempus, arcu ultrices tempor congue, odio orci semper nulla, placerat facilisis odio urna id tellus.`,
-//         rating: '8.8',
-//     })
-// };
-
-
-
 export default function MovieListPage(props: any) {
     const navigate = useNavigate()
 
@@ -58,77 +41,24 @@ export default function MovieListPage(props: any) {
     const [movieDetails, setMovieDetails] = useState(null as any);
 
 
-    const fetchMoviesData = (signal: any) => {
-        fetch(
-            constructUrl(
-                'http://localhost:4000/movies',
-                {
-                    sortBy: sortBy,
-                    sortOrder: 'asc',
-                    search: searchText,
-                    searchBy: 'title',
-                    filter: activeGenres.length === genres.length ? '' : activeGenres.join(','),
-                }
-            ),
-            { signal }
-        )
-            .then(response => {
-                return response.json();
-            })
-            .then(parsedResponse => {
-                return parsedResponse.data.map((movie: any): MovieData => {
-                    return {
-                        id: movie.id,
-                        name: movie.title,
-                        imageUrl: movie.poster_path,
-                        releaseYear: movie.release_date,
-                        duration: movie.runtime,
-                        relevantGenres: movie.genres,
-                        description: movie.overview,
-                        rating: movie.vote_average,
-                    }
-                });
-            })
-            .then(transformedData => {
-                setMovies(transformedData);
-            })
-            .catch(error => {
-                if (error.name === 'AbortError') {
-                    console.log('Request Aborted!')
-                    return;
-                }
-            })
+    const fetchMoviesData = async (signal: any) => {
+        const movies: MovieData[] | null = await request.findMoviesByQuery(
+            {
+                sortBy: sortBy,
+                sortOrder: 'asc',
+                query: searchText,
+                searchBy: 'title',
+                filter: activeGenres.length === genres.length ? '' : activeGenres.join(','),
+            },
+            signal
+        );
+
+        if (movies) setMovies(movies);
     }
 
-    const fetchMovieData = (movieId: string, signal: any) => {
-        fetch(
-            `http://localhost:4000/movies/${movieId}`,
-            { signal }
-        )
-            .then(response => {
-                return response.json()
-            })
-            .then(parsedMovie => {
-                return {
-                    id: parsedMovie.id,
-                    name: parsedMovie.title,
-                    imageUrl: parsedMovie.poster_path,
-                    releaseYear: parsedMovie.release_date,
-                    duration: parsedMovie.runtime,
-                    relevantGenres: parsedMovie.genres,
-                    description: parsedMovie.overview,
-                    rating: parsedMovie.vote_average,
-                }
-            })
-            .then(transformedMovieData => {
-                setMovieDetails(transformedMovieData);
-            })
-            .catch(error => {
-                if (error.name === 'AbortError') {
-                    console.log('Request Aborted!')
-                    return;
-                }
-            })
+    const fetchMovieData = async (movieId: string, signal: AbortSignal) => {
+        const movie: MovieData | null = await request.findMovieById(movieId, signal);
+        if (movie) setMovieDetails(movie);
     }
 
     useEffect(() => {
