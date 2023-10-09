@@ -178,8 +178,8 @@ export default function MovieListPage(props: any) {
     }
 
     const updateMovieDetails = (movie?: MovieData) => {
+        navigate(`/${movie ? movie.id : ''}`);
 
-        navigate(`/${movie ? movie.id : ''}`)
         if (movie) setMovieDetails(movie);
         else setMovieDetails(null as any);
     }
