@@ -181,15 +181,7 @@ export default function MovieListPage(props: any) {
 
         navigate(`/${movie ? movie.id : ''}`)
         if (movie) setMovieDetails(movie);
-        else setMovieDetails(null as any)
-        // if (movie) {
-        //     setMovieDetails(movie);
-        //     navigate(`/${movie.id}`)
-        // }
-        // else {
-        //     setMovieDetails(null as any)
-        //     navigate('/')
-        // }
+        else setMovieDetails(null as any);
     }
 
     const addMovie = (movie: MovieData) => {
