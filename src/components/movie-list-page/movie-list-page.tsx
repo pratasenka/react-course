@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
 import { useState } from "react";
+import { useNavigate, useParams, useSearchParams, createSearchParams } from "react-router-dom";
 
 import { MoviesList } from "../movies-list/movies-list";
 import { HeaderSearch } from "../header-search/header-search";
@@ -7,9 +8,10 @@ import { MovieDetails } from "../movie-details/movie-details";
 import { Portal } from "../portal/portal";
 import { EditMovieDetails } from "../edit-movie-details/edit-movie-details";
 import { ModalDialog } from "../modal-dialog/modal-dialog";
-import { nanoid } from "nanoid";
 import { DeleteMovie } from "../delete-movie/delete-movie";
-import { constructUrl } from "../../utils";
+import { filterSearchParams } from "../../utils";
+import { request } from '../../requests';
+
 
 export interface MovieData {
     id: string;
@@ -22,85 +24,72 @@ export interface MovieData {
     rating: string;
 }
 
-const genres = ['Documentary', 'Comedy', 'Horror', 'Crime'];
+const genres = ['documentary', 'comedy', 'horror', 'crime'];
 
 
-// const moviesArray: MovieData[] = [];
+export default function MovieListPage(props: any) {
+    const navigate = useNavigate();
+    const { movieId } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-// for (let i = 0; i < 1; ++i) {
-//     moviesArray.push({
-//         id: nanoid(),
-//         name: `Oppenheimer ${20 - i}`,
-//         imageUrl: 'https://avatars.mds.yandex.net/get-kinopoisk-image/4486454/c5292109-642c-4ab0-894a-cc304e1bcec4/600x900',
-//         releaseYear: 2025 + (-2 ^ i),
-//         duration: '3h 10min',
-//         relevantGenres: ['DOCUMENTARY', 'HORROR'],
-//         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean turpis turpis, mollis ut cursus ac, ultricies sed odio. Duis eleifend elit quam, sed gravida odio pharetra in. Quisque quam est, condimentum nec turpis id, auctor vulputate dui. Vivamus tempus, arcu ultrices tempor congue, odio orci semper nulla, placerat facilisis odio urna id tellus.`,
-//         rating: '8.8',
-//     })
-// };
-
-
-
-export default function MovieListPage() {
     const [movies, setMovies] = useState<MovieData[]>([]);
-    const [sortBy, setSortBy] = useState('');
-    const [activeGenres, setActiveGenres] = useState<string[]>([...genres]);
-    const [searchText, setSearchText] = useState('');
-    const [modalDialogParams, setModalDialogParams] = useState<any>(null);
     const [movieDetails, setMovieDetails] = useState(null as any);
+    const [modalDialogParams, setModalDialogParams] = useState<any>(null);
 
 
+    const fetchMoviesData = async (signal: any) => {
+        const movies: MovieData[] | null = await request.findMoviesByQuery(
+            {
+                sortBy: searchParams.get('sortBy') || '',
+                sortOrder: 'asc',
+                search: searchParams.get('query') || '',
+                searchBy: 'title',
+                filter: searchParams.get('genre') || '',
+            },
+            signal
+        );
 
-    const fetchMoviesData = (signal: any) => {
-        fetch(
-            constructUrl(
-                'http://localhost:4000/movies',
-                {
-                    sortBy: sortBy,
-                    sortOrder: 'asc',
-                    search: searchText,
-                    searchBy: 'title',
-                    filter: activeGenres.length === genres.length ? '' : activeGenres.join(','),
-                }
-            ),
-            { signal }
-        )
-            .then(response => {
-                return response.json()
-            })
-            .then(parsedResponse => {
-                return parsedResponse.data.map((movie: any): MovieData => {
-                    return {
-                        id: movie.id,
-                        name: movie.title,
-                        imageUrl: movie.poster_path,
-                        releaseYear: movie.release_date,
-                        duration: movie.runtime,
-                        relevantGenres: movie.genres,
-                        description: movie.overview,
-                        rating: movie.vote_average,
-                    }
+        if (movies) setMovies(movies);
+    }
+
+    const fetchMovieData = async (movieId: string, signal: AbortSignal) => {
+        const movie: MovieData | null = await request.findMovieById(movieId, signal);
+        if (movie) setMovieDetails(movie);
+    }
+
+    const updateSearchParameters = (key: string) => {
+        return (value: string | string[]) => {
+            setSearchParams(
+                createSearchParams({
+                    ...Object.fromEntries([...searchParams]),
+                    [key]: value instanceof Array ? value.join(',') : value,
                 })
-            })
-            .then(transformedData => {
-                setMovies(transformedData)
-            })
-            .catch(error => {
-                if (error.name === 'AbortError') {
-                    console.log('Request Aborted!')
-                    return;
-                }
-            })
+            );
+        }
     }
 
     useEffect(() => {
         const abortController = new AbortController();
 
+        if (movieId) fetchMovieData(movieId, abortController.signal);
         fetchMoviesData(abortController.signal);
 
         return () => abortController.abort();
-    }, [activeGenres, searchText, sortBy]);
+    }, [searchParams, movieId]);
+
+
+
+    const updateMovieDetails = (movie?: MovieData) => {
+        navigate({
+            pathname: `/${movie ? movie.id : ''}`,
+            search: `?${createSearchParams({
+                ...Object.fromEntries([...searchParams])
+            })}`
+        });
+
+        if (movie) setMovieDetails(movie);
+        else setMovieDetails(null as any);
+    }
 
     const modalDialogContentConfiguration = (params: any) => {
         if (params.title === "ADD MOVIE") {
@@ -124,15 +113,6 @@ export default function MovieListPage() {
         }
 
         return <h3 style={{ padding: '30px' }}>Something went wrong...</h3>
-    }
-
-    const changeActiveGenresCallback = (activeGenres: string[]) => {
-        setActiveGenres(activeGenres);
-    }
-
-    const updateMovieDetails = (movie?: MovieData) => {
-        if (movie) setMovieDetails(movie);
-        else setMovieDetails(null as any)
     }
 
     const addMovie = (movie: MovieData) => {
@@ -159,6 +139,7 @@ export default function MovieListPage() {
         setModalDialogParams(null)
     }
 
+
     return (<>
         <div className="App">
             <div className="App-header">
@@ -169,8 +150,8 @@ export default function MovieListPage() {
                     />
                     :
                     <HeaderSearch
-                        searchText={searchText}
-                        searchCallback={(searchText: string) => setSearchText(searchText)}
+                        searchText={searchParams.get('query')}
+                        searchCallback={(searchText: string) => updateSearchParameters('query')(searchText)}
                         setEditMovieDetails={() => setModalDialogParams({ title: 'ADD MOVIE', action: addMovie })}
                     />
                 }
@@ -180,12 +161,13 @@ export default function MovieListPage() {
                 <MoviesList
                     movies={movies}
                     genres={genres}
-                    activeGenres={activeGenres}
+                    activeGenres={searchParams.get('genre')?.split(',') || []}
                     edit={(movie: MovieData) => setModalDialogParams({ title: 'EDIT MOVIE', movie: movie, action: editMovie })}
                     delete={(movie: MovieData) => setModalDialogParams({ title: 'DELETE MOVIE', movie: movie, action: deleteMovie })}
-                    setActiveGenres={changeActiveGenresCallback}
+                    setActiveGenres={(activeGenres: string[]) => updateSearchParameters('genre')(activeGenres.length === genres.length ? [] : activeGenres)}
                     setMovieDetails={updateMovieDetails}
-                    setSortBy={setSortBy}
+                    sortBy={searchParams.get('sortBy') || ''}
+                    setSortBy={(sortBy: string) => updateSearchParameters('sortBy')(sortBy)}
                 />
             </div >
         </div>

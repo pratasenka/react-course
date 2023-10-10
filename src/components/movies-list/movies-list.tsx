@@ -19,6 +19,7 @@ export function MoviesList(props: any): React.ReactElement {
             genres={props.genres}
             activeGenres={props.activeGenres}
             setActiveGenres={props.setActiveGenres}
+            sortBy={props.sortBy}
             setSortBy={props.setSortBy}
         />
         <div className="movies-count">

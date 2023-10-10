@@ -22,6 +22,7 @@ export function MoviesSorting(props: any): React.ReactElement {
         <div className="movies-sorting ">
             <span>SORTBY</span>
             <Dropdown
+                selected={props.sortBy}
                 options={SORT_OPTIONS}
                 onClick={props.setSortBy}
             />

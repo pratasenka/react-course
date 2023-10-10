@@ -38,7 +38,7 @@ export function SelectGenre(props: any): React.ReactElement {
                 <a
                     key={'All'}
                     id={'All'}
-                    className={props.genres.length === active.length ? 'active' : ''}
+                    className={(props.genres.length === active.length || active.length === 0) ? 'active' : ''}
                     onClick={() => updateActive('All')}
                 >
                     ALL
@@ -57,7 +57,7 @@ export function SelectGenre(props: any): React.ReactElement {
         }
         <span></span>
         <MoviesSorting
-            options={props.sortOptions}
+            sortBy={props.sortBy}
             setSortBy={props.setSortBy}
         />
     </div>
