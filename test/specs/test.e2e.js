@@ -59,14 +59,14 @@ describe('App', async () => {
 
     it('should call fetch to correct url after genre selection', async () => {
         const mock = await browser.mock('http://localhost:4000/**')
-        const genre = await $('a[id="Documentary-genre-item"]');
+        const genre = await $('a[id="documentary-genre-item"]');
         await genre.click();
         await browser.pause();
 
         expect(mock.calls[0].url).toBe(
-            "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=&searchBy=title&filter=Documentary"
+            "http://localhost:4000/movies?sortBy=&sortOrder=asc&search=&searchBy=title&filter=documentary"
         );
-        expect(await browser.getUrl()).toBe('http://localhost:3000/?genre=Documentary');
+        expect(await browser.getUrl()).toBe('http://localhost:3000/?genre=documentary');
     });
 
     it('should click on movie and show movie details', async () => {

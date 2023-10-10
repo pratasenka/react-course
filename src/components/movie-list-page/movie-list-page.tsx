@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, createSearchParams } from "react-router-dom";
 
 import { MoviesList } from "../movies-list/movies-list";
 import { HeaderSearch } from "../header-search/header-search";
@@ -9,7 +9,7 @@ import { Portal } from "../portal/portal";
 import { EditMovieDetails } from "../edit-movie-details/edit-movie-details";
 import { ModalDialog } from "../modal-dialog/modal-dialog";
 import { DeleteMovie } from "../delete-movie/delete-movie";
-import { constructUrl, filterSearchParams } from "../../utils";
+import { filterSearchParams } from "../../utils";
 import { request } from '../../requests';
 
 
@@ -24,31 +24,27 @@ export interface MovieData {
     rating: string;
 }
 
-const genres = ['Documentary', 'Comedy', 'Horror', 'Crime'];
+const genres = ['documentary', 'comedy', 'horror', 'crime'];
 
 
 export default function MovieListPage(props: any) {
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
     const { movieId } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [movies, setMovies] = useState<MovieData[]>([]);
-    const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || '');
-    const [activeGenres, setActiveGenres] = useState<string[]>(searchParams.get('genre')?.split(',') || []);
-    const [searchText, setSearchText] = useState(searchParams.get('query') || '');
-    const [modalDialogParams, setModalDialogParams] = useState<any>(null);
     const [movieDetails, setMovieDetails] = useState(null as any);
+    const [modalDialogParams, setModalDialogParams] = useState<any>(null);
 
 
     const fetchMoviesData = async (signal: any) => {
         const movies: MovieData[] | null = await request.findMoviesByQuery(
             {
-                sortBy: sortBy,
+                sortBy: searchParams.get('sortBy') || '',
                 sortOrder: 'asc',
-                query: searchText,
+                search: searchParams.get('query') || '',
                 searchBy: 'title',
-                filter: activeGenres.length === genres.length ? '' : activeGenres.join(','),
+                filter: searchParams.get('genre') || '',
             },
             signal
         );
@@ -61,23 +57,39 @@ export default function MovieListPage(props: any) {
         if (movie) setMovieDetails(movie);
     }
 
+    const updateSearchParameters = (key: string) => {
+        return (value: string | string[]) => {
+            setSearchParams(
+                createSearchParams({
+                    ...Object.fromEntries([...searchParams]),
+                    [key]: value instanceof Array ? value.join(',') : value,
+                })
+            );
+        }
+    }
+
     useEffect(() => {
         const abortController = new AbortController();
 
         if (movieId) fetchMovieData(movieId, abortController.signal);
         fetchMoviesData(abortController.signal);
 
-        setSearchParams(
-            filterSearchParams({
-                query: searchText,
-                genre: activeGenres.join(','),
-                sortBy: sortBy,
-            })
-        );
-
-
         return () => abortController.abort();
-    }, [activeGenres, searchText, sortBy, movieId]);
+    }, [searchParams, movieId]);
+
+
+
+    const updateMovieDetails = (movie?: MovieData) => {
+        navigate({
+            pathname: `/${movie ? movie.id : ''}`,
+            search: `?${createSearchParams({
+                ...Object.fromEntries([...searchParams])
+            })}`
+        });
+
+        if (movie) setMovieDetails(movie);
+        else setMovieDetails(null as any);
+    }
 
     const modalDialogContentConfiguration = (params: any) => {
         if (params.title === "ADD MOVIE") {
@@ -101,17 +113,6 @@ export default function MovieListPage(props: any) {
         }
 
         return <h3 style={{ padding: '30px' }}>Something went wrong...</h3>
-    }
-
-    const changeActiveGenresCallback = (activeGenres: string[]) => {
-        setActiveGenres(activeGenres.length === genres.length ? [] : activeGenres);
-    }
-
-    const updateMovieDetails = (movie?: MovieData) => {
-        navigate(`/${movie ? movie.id : ''}`);
-
-        if (movie) setMovieDetails(movie);
-        else setMovieDetails(null as any);
     }
 
     const addMovie = (movie: MovieData) => {
@@ -138,6 +139,7 @@ export default function MovieListPage(props: any) {
         setModalDialogParams(null)
     }
 
+
     return (<>
         <div className="App">
             <div className="App-header">
@@ -148,8 +150,8 @@ export default function MovieListPage(props: any) {
                     />
                     :
                     <HeaderSearch
-                        searchText={searchText}
-                        searchCallback={(searchText: string) => setSearchText(searchText)}
+                        searchText={searchParams.get('query')}
+                        searchCallback={(searchText: string) => updateSearchParameters('query')(searchText)}
                         setEditMovieDetails={() => setModalDialogParams({ title: 'ADD MOVIE', action: addMovie })}
                     />
                 }
@@ -159,13 +161,13 @@ export default function MovieListPage(props: any) {
                 <MoviesList
                     movies={movies}
                     genres={genres}
-                    activeGenres={activeGenres}
+                    activeGenres={searchParams.get('genre')?.split(',') || []}
                     edit={(movie: MovieData) => setModalDialogParams({ title: 'EDIT MOVIE', movie: movie, action: editMovie })}
                     delete={(movie: MovieData) => setModalDialogParams({ title: 'DELETE MOVIE', movie: movie, action: deleteMovie })}
-                    setActiveGenres={changeActiveGenresCallback}
+                    setActiveGenres={(activeGenres: string[]) => updateSearchParameters('genre')(activeGenres.length === genres.length ? [] : activeGenres)}
                     setMovieDetails={updateMovieDetails}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
+                    sortBy={searchParams.get('sortBy') || ''}
+                    setSortBy={(sortBy: string) => updateSearchParameters('sortBy')(sortBy)}
                 />
             </div >
         </div>

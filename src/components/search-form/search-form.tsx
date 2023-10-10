@@ -7,7 +7,7 @@ import "./search-form.css"
 
 
 export function SearchForm(props: any): React.ReactElement {
-    const [searchText, setSearchText] = useState(props.searchText);
+    const [searchText, setSearchText] = useState(props.searchText || '');
 
     const onSubmit = () => {
         props.searchCallback(searchText);

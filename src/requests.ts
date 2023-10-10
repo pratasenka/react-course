@@ -2,7 +2,7 @@ import { MovieData } from "./components/movie-list-page/movie-list-page";
 import { constructUrl } from "./utils";
 
 export interface FindMoviesParams {
-    query: string;
+    search: string;
     filter: string;
     sortBy: string;
     sortOrder: string;

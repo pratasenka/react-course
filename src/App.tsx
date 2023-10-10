@@ -8,9 +8,7 @@ function App() {
   return (<>
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<MovieListPage />}>
-          <Route path=':movieId' element={<MovieListPage />} />
-        </Route>
+        <Route path='/:movieId?' element={<MovieListPage />} />
         <Route path='*' element={<h1 style={{ textAlign: 'center' }}>404 Not Found</h1>} />
       </Routes>
     </BrowserRouter>
