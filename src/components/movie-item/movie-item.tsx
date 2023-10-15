@@ -2,6 +2,7 @@ import React from "react"
 import { useState } from "react"
 
 import "./movie-item.css";
+import { Link } from "react-router-dom";
 
 
 export function MovieItem(props: any): React.ReactElement {
@@ -17,17 +18,17 @@ export function MovieItem(props: any): React.ReactElement {
                 <div className="dropdown dropdown-position">
                     <button className="dropbtn">x</button>
                     <div className="dropdown-content">
-                        <a href="#"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                props.edit(props.movie)
-                            }}
+                        <a onClick={(e) => {
+                            e.stopPropagation();
+                            props.edit(props.movie.id);
+                            console.log('xxx')
+                        }}
                         >Edit</a>
-                        <a href="#"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                props.delete(props.movie)
-                            }}
+
+                        <a onClick={(e) => {
+                            e.stopPropagation()
+                            props.delete(props.movie.id)
+                        }}
                         >Delete</a>
                     </div>
                 </div>

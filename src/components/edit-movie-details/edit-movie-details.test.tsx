@@ -22,8 +22,8 @@ describe(EditMovieDetails, () => {
         let clickResult = null;
         const { getByText } = render(
             <EditMovieDetails
-                movie={movie}
-                action={(movieInfo: MovieData) => clickResult = movieInfo}
+            // movie={movie}
+            // action={(movieInfo: MovieData) => clickResult = movieInfo}
             />
         );
 

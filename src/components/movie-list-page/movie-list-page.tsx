@@ -1,15 +1,10 @@
 import React, { useEffect } from "react"
 import { useState } from "react";
-import { useNavigate, useParams, useSearchParams, createSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, createSearchParams, Outlet } from "react-router-dom";
 
 import { MoviesList } from "../movies-list/movies-list";
 import { HeaderSearch } from "../header-search/header-search";
 import { MovieDetails } from "../movie-details/movie-details";
-import { Portal } from "../portal/portal";
-import { EditMovieDetails } from "../edit-movie-details/edit-movie-details";
-import { ModalDialog } from "../modal-dialog/modal-dialog";
-import { DeleteMovie } from "../delete-movie/delete-movie";
-import { filterSearchParams } from "../../utils";
 import { request } from '../../requests';
 
 
@@ -34,7 +29,6 @@ export default function MovieListPage(props: any) {
 
     const [movies, setMovies] = useState<MovieData[]>([]);
     const [movieDetails, setMovieDetails] = useState(null as any);
-    const [modalDialogParams, setModalDialogParams] = useState<any>(null);
 
 
     const fetchMoviesData = async (signal: any) => {
@@ -68,17 +62,6 @@ export default function MovieListPage(props: any) {
         }
     }
 
-    useEffect(() => {
-        const abortController = new AbortController();
-
-        if (movieId) fetchMovieData(movieId, abortController.signal);
-        fetchMoviesData(abortController.signal);
-
-        return () => abortController.abort();
-    }, [searchParams, movieId]);
-
-
-
     const updateMovieDetails = (movie?: MovieData) => {
         navigate({
             pathname: `/${movie ? movie.id : ''}`,
@@ -91,54 +74,14 @@ export default function MovieListPage(props: any) {
         else setMovieDetails(null as any);
     }
 
-    const modalDialogContentConfiguration = (params: any) => {
-        if (params.title === "ADD MOVIE") {
-            return <EditMovieDetails
-                action={addMovie}
-            />
-        }
+    useEffect(() => {
+        const abortController = new AbortController();
 
-        if (params.title === "EDIT MOVIE") {
-            return <EditMovieDetails
-                movie={params.movie}
-                action={editMovie}
-            />
-        }
+        if (movieId) fetchMovieData(movieId, abortController.signal);
+        fetchMoviesData(abortController.signal);
 
-        if (params.title === "DELETE MOVIE") {
-            return <DeleteMovie
-                movie={params.movie}
-                action={deleteMovie}
-            />
-        }
-
-        return <h3 style={{ padding: '30px' }}>Something went wrong...</h3>
-    }
-
-    const addMovie = (movie: MovieData) => {
-        setMovies([...movies, movie]);
-        setModalDialogParams(null)
-    }
-
-    const editMovie = (movie: MovieData) => {
-        movies.splice(
-            movies.findIndex(oldMovie => oldMovie.id === movie.id),
-            1,
-            movie
-        )
-        setMovies([...movies]);
-        setModalDialogParams(null)
-    }
-
-    const deleteMovie = (movie: MovieData) => {
-        movies.splice(
-            movies.findIndex(oldMovie => oldMovie.id === movie.id),
-            1
-        )
-        setMovies([...movies]);
-        setModalDialogParams(null)
-    }
-
+        return () => abortController.abort();
+    }, [searchParams, movieId]);
 
     return (<>
         <div className="App">
@@ -152,7 +95,6 @@ export default function MovieListPage(props: any) {
                     <HeaderSearch
                         searchText={searchParams.get('query')}
                         searchCallback={(searchText: string) => updateSearchParameters('query')(searchText)}
-                        setEditMovieDetails={() => setModalDialogParams({ title: 'ADD MOVIE', action: addMovie })}
                     />
                 }
             </div>
@@ -162,8 +104,7 @@ export default function MovieListPage(props: any) {
                     movies={movies}
                     genres={genres}
                     activeGenres={searchParams.get('genre')?.split(',') || []}
-                    edit={(movie: MovieData) => setModalDialogParams({ title: 'EDIT MOVIE', movie: movie, action: editMovie })}
-                    delete={(movie: MovieData) => setModalDialogParams({ title: 'DELETE MOVIE', movie: movie, action: deleteMovie })}
+                    edit={(movieId: string) => navigate(`${movieId}/edit`)}
                     setActiveGenres={(activeGenres: string[]) => updateSearchParameters('genre')(activeGenres.length === genres.length ? [] : activeGenres)}
                     setMovieDetails={updateMovieDetails}
                     sortBy={searchParams.get('sortBy') || ''}
@@ -171,17 +112,7 @@ export default function MovieListPage(props: any) {
                 />
             </div >
         </div>
-        {
-            modalDialogParams &&
-            <Portal>
-                <ModalDialog
-                    title={modalDialogParams.title}
-                    close={() => setModalDialogParams(null)}
-                >
-                    {modalDialogContentConfiguration(modalDialogParams)}
-                </ModalDialog>
-            </Portal>
-        }
+        <Outlet />
     </>
     );
 }

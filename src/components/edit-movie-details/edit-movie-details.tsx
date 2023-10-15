@@ -1,44 +1,67 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
 import { nanoid } from "nanoid";
+import { useNavigate, useParams } from "react-router-dom";
 
 import "./edit-movie-details.css";
 import { LabeledInput } from "../input/labeled-input";
 import { Button } from "../button/button";
 import { MovieData } from "../movie-list-page/movie-list-page";
+import { request } from '../../requests';
+
+const emptyMovieData: MovieData = {
+    id: '',
+    name: '',
+    imageUrl: '',
+    releaseYear: '',
+    duration: '',
+    relevantGenres: [],
+    description: '',
+    rating: '',
+}
+
+export function EditMovieDetails(): React.ReactElement {
+    const navigate = useNavigate();
+    const { movieId } = useParams();
+
+    const [originalMovie, setOriginalMovie] = useState<MovieData>({ ...emptyMovieData });
+    const [movie, setMovie] = useState<MovieData>({ ...emptyMovieData });
 
 
-
-export function EditMovieDetails(props: any): React.ReactElement {
-    const [title, setTitle] = useState(props.movie?.name ?? '');
-    const [release, setRelease] = useState(props.movie?.releaseYear ?? '');
-    const [url, setUrl] = useState(props.movie?.imageUrl ?? '');
-    const [rating, setRating] = useState(props.movie?.rating ?? '');
-    const [genres, setGenres] = useState(props.movie?.relevantGenres ?? []);
-    const [runtime, setRuntime] = useState(props.movie?.duration ?? '');
-    const [description, setDescription] = useState(props.movie?.description ?? '');
-
-    const reset = () => {
-        setTitle(props.movie?.name ?? '');
-        setRelease(props.movie?.releaseYear ?? '');
-        setUrl(props.movie?.imageUrl ?? '');
-        setRating(props.movie?.rating ?? '');
-        setGenres(props.movie?.relevantGenres ?? []);
-        setRuntime(props.movie?.duration ?? '');
-        setDescription(props.movie?.description ?? '');
+    const fetchMovieData = async (movieId: string, signal: AbortSignal) => {
+        const movie: MovieData | null = await request.findMovieById(movieId, signal);
+        if (movie) {
+            setMovie({ ...movie });
+            setOriginalMovie({ ...movie })
+        }
     }
 
-    const triggerAction = () => {
-        props.action({
-            id: props.movie?.id || nanoid(),
-            name: title,
-            imageUrl: url,
-            rating: rating,
-            description: description,
-            releaseYear: release,
-            relevantGenres: genres,
-            duration: runtime,
-        } as MovieData)
+    const reset = () => {
+        setMovie({ ...originalMovie });
+    }
+
+    const onUpdate = (update: { key: string, value: string }) => {
+        setMovie({
+            ...movie,
+            [update.key]: update.value
+        })
+    }
+
+    useEffect(() => {
+        const abortController = new AbortController();
+
+        if (movieId) fetchMovieData(movieId, abortController.signal);
+
+        return () => abortController.abort();
+    }, [movieId]);
+
+    const triggerAction = async () => {
+        const newMovie: MovieData | null = movieId ?
+            await request.updateMovieById({ ...movie }) :
+            await request.addMovie({ ...movie });
+
+        if (newMovie) navigate(`/${newMovie.id}`,)
+        console.log(newMovie);
     }
 
     return <>
@@ -50,8 +73,8 @@ export function EditMovieDetails(props: any): React.ReactElement {
                         movieDetailsElementId={'movie-details-title'}
                         labelClassName='edit-movie-details-label'
                         inputClassName='edit-movie-details-input'
-                        value={title}
-                        onChange={setTitle}
+                        value={movie?.name || ''}
+                        onChange={(newValue: string) => onUpdate({ key: 'name', value: newValue })}
                         placeholder='Movie Name' />
                 </div>
                 <div className="event-movie-details-col-right">
@@ -60,8 +83,8 @@ export function EditMovieDetails(props: any): React.ReactElement {
                         movieDetailsElementId={'movie-details-release'}
                         labelClassName='edit-movie-details-label'
                         inputClassName='edit-movie-details-input'
-                        value={release}
-                        onChange={setRelease}
+                        value={movie?.releaseYear || ''}
+                        onChange={(newValue: string) => onUpdate({ key: 'releaseYear', value: newValue })}
                         placeholder='Select Date' />
                 </div>
             </div>
@@ -73,8 +96,8 @@ export function EditMovieDetails(props: any): React.ReactElement {
                         movieDetailsElementId={'movie-details-url'}
                         labelClassName='edit-movie-details-label'
                         inputClassName='edit-movie-details-input'
-                        value={url}
-                        onChange={setUrl}
+                        value={movie?.imageUrl || ''}
+                        onChange={(newValue: string) => onUpdate({ key: 'imageUrl', value: newValue })}
                         placeholder='http://' />
                 </div>
                 <div className="event-movie-details-col-right">
@@ -83,8 +106,8 @@ export function EditMovieDetails(props: any): React.ReactElement {
                         movieDetailsElementId={'movie-details-rating'}
                         labelClassName='edit-movie-details-label'
                         inputClassName='edit-movie-details-input'
-                        value={rating}
-                        onChange={setRating}
+                        value={movie?.rating || ''}
+                        onChange={(newValue: string) => onUpdate({ key: 'rating', value: newValue })}
                         placeholder='7.8' />
                 </div>
             </div>
@@ -96,8 +119,8 @@ export function EditMovieDetails(props: any): React.ReactElement {
                         movieDetailsElementId={'movie-details-genre'}
                         labelClassName='edit-movie-details-label'
                         inputClassName='edit-movie-details-input'
-                        value={genres.join(',')}
-                        onChange={setGenres}
+                        value={movie?.relevantGenres || ''}
+                        onChange={(newValue: string) => onUpdate({ key: 'relevantGenres', value: newValue })}
                         placeholder='Select Genre' />
                 </div>
                 <div className="event-movie-details-col-right">
@@ -106,8 +129,8 @@ export function EditMovieDetails(props: any): React.ReactElement {
                         movieDetailsElementId={'movie-details-duration'}
                         labelClassName='edit-movie-details-label'
                         inputClassName='edit-movie-details-input'
-                        value={runtime}
-                        onChange={setRuntime}
+                        value={movie?.duration || ''}
+                        onChange={(newValue: string) => onUpdate({ key: 'duration', value: newValue })}
                         placeholder='minutes' />
                 </div>
             </div>
@@ -119,8 +142,8 @@ export function EditMovieDetails(props: any): React.ReactElement {
                         movieDetailsElementId={'movie-details-genre'}
                         labelClassName='edit-movie-details-label'
                         inputClassName='edit-movie-details-input'
-                        value={description}
-                        onChange={setDescription}
+                        value={movie?.description || ''}
+                        onChange={(newValue: string) => onUpdate({ key: 'description', value: newValue })}
                         placeholder='Movie Description' />
                 </div>
             </div>
