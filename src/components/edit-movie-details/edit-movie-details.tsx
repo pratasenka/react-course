@@ -1,50 +1,30 @@
 import React, { useEffect } from "react"
 import { useState } from "react"
-import { nanoid } from "nanoid";
 import { useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 import "./edit-movie-details.css";
 import { LabeledInput } from "../input/labeled-input";
 import { Button } from "../button/button";
 import { MovieData } from "../movie-list-page/movie-list-page";
 import { request } from '../../requests';
-
-const emptyMovieData: MovieData = {
-    id: '',
-    name: '',
-    imageUrl: '',
-    releaseYear: '',
-    duration: '',
-    relevantGenres: [],
-    description: '',
-    rating: '',
-}
+import { getEmptyMovieData } from "../../utils";
 
 export function EditMovieDetails(): React.ReactElement {
+    const [defaultMovie, setDefaultMovie] = useState<MovieData>(getEmptyMovieData());
+    const { register, handleSubmit, formState, reset } = useForm<MovieData>({
+        defaultValues: defaultMovie,
+    });
+
     const navigate = useNavigate();
     const { movieId } = useParams();
-
-    const [originalMovie, setOriginalMovie] = useState<MovieData>({ ...emptyMovieData });
-    const [movie, setMovie] = useState<MovieData>({ ...emptyMovieData });
-
 
     const fetchMovieData = async (movieId: string, signal: AbortSignal) => {
         const movie: MovieData | null = await request.findMovieById(movieId, signal);
         if (movie) {
-            setMovie({ ...movie });
-            setOriginalMovie({ ...movie })
+            reset({ ...movie });
+            setDefaultMovie({ ...movie });
         }
-    }
-
-    const reset = () => {
-        setMovie({ ...originalMovie });
-    }
-
-    const onUpdate = (update: { key: string, value: string }) => {
-        setMovie({
-            ...movie,
-            [update.key]: update.value
-        })
     }
 
     useEffect(() => {
@@ -55,113 +35,169 @@ export function EditMovieDetails(): React.ReactElement {
         return () => abortController.abort();
     }, [movieId]);
 
-    const triggerAction = async () => {
+    const onReset = async () => {
+        reset(defaultMovie)
+    }
+
+    const onSubmit = async (movie: MovieData) => {
         const newMovie: MovieData | null = movieId ?
             await request.updateMovieById({ ...movie }) :
             await request.addMovie({ ...movie });
 
-        if (newMovie) navigate(`/${newMovie.id}`,)
-        console.log(newMovie);
+        if (newMovie) navigate(`/${newMovie.id}`);
     }
 
     return <>
         <div className="edit-movie-details">
-            <div className="event-movie-details-row">
-                <div className="event-movie-details-col-left">
-                    <LabeledInput
-                        label='TITLE'
-                        movieDetailsElementId={'movie-details-title'}
-                        labelClassName='edit-movie-details-label'
-                        inputClassName='edit-movie-details-input'
-                        value={movie?.name || ''}
-                        onChange={(newValue: string) => onUpdate({ key: 'name', value: newValue })}
-                        placeholder='Movie Name' />
+            <form id='edit-movie-details' onSubmit={handleSubmit(onSubmit)}>
+                <div className="event-movie-details-row">
+                    <div className="event-movie-details-col-left">
+                        <LabeledInput
+                            inputSettings={{
+                                field: 'name',
+                                register: register,
+                                error: formState.errors,
+                                options: {
+                                    required: true
+                                }
+                            }}
+                            label='TITLE'
+                            movieDetailsElementId={'movie-details-title'}
+                            labelClassName='edit-movie-details-label'
+                            inputClassName='edit-movie-details-input'
+                            placeholder='Movie Name' />
+                    </div>
+                    <div className="event-movie-details-col-right">
+                        <LabeledInput
+                            inputSettings={{
+                                field: 'releaseYear',
+                                register: register,
+                                error: formState.errors,
+                                options: {
+                                    required: true,
+                                    min: 1895,
+                                    max: new Date().getFullYear(),
+                                }
+                            }}
+                            label='RELEASE DATE'
+                            movieDetailsElementId={'movie-details-release'}
+                            labelClassName='edit-movie-details-label'
+                            inputClassName='edit-movie-details-input'
+                            placeholder='Select Date' />
+                    </div>
                 </div>
-                <div className="event-movie-details-col-right">
-                    <LabeledInput
-                        label='RELEASE DATE'
-                        movieDetailsElementId={'movie-details-release'}
-                        labelClassName='edit-movie-details-label'
-                        inputClassName='edit-movie-details-input'
-                        value={movie?.releaseYear || ''}
-                        onChange={(newValue: string) => onUpdate({ key: 'releaseYear', value: newValue })}
-                        placeholder='Select Date' />
-                </div>
-            </div>
 
-            <div className="event-movie-details-row">
-                <div className="event-movie-details-col-left">
-                    <LabeledInput
-                        label='MOVIE URL'
-                        movieDetailsElementId={'movie-details-url'}
-                        labelClassName='edit-movie-details-label'
-                        inputClassName='edit-movie-details-input'
-                        value={movie?.imageUrl || ''}
-                        onChange={(newValue: string) => onUpdate({ key: 'imageUrl', value: newValue })}
-                        placeholder='http://' />
+                <div className="event-movie-details-row">
+                    <div className="event-movie-details-col-left">
+                        <LabeledInput
+                            inputSettings={{
+                                field: 'imageUrl',
+                                register: register,
+                                error: formState.errors,
+                                options: {
+                                    required: true
+                                }
+                            }}
+                            label='MOVIE URL'
+                            movieDetailsElementId={'movie-details-url'}
+                            labelClassName='edit-movie-details-label'
+                            inputClassName='edit-movie-details-input'
+                            placeholder='http://' />
+                    </div>
+                    <div className="event-movie-details-col-right">
+                        <LabeledInput
+                            inputSettings={{
+                                field: 'rating',
+                                register: register,
+                                error: formState.errors,
+                                options: {
+                                    required: true,
+                                    min: 0,
+                                    max: 10
+                                }
+                            }}
+                            label='RATING'
+                            movieDetailsElementId={'movie-details-rating'}
+                            labelClassName='edit-movie-details-label'
+                            inputClassName='edit-movie-details-input'
+                            placeholder='7.8' />
+                    </div>
                 </div>
-                <div className="event-movie-details-col-right">
-                    <LabeledInput
-                        label='RATING'
-                        movieDetailsElementId={'movie-details-rating'}
-                        labelClassName='edit-movie-details-label'
-                        inputClassName='edit-movie-details-input'
-                        value={movie?.rating || ''}
-                        onChange={(newValue: string) => onUpdate({ key: 'rating', value: newValue })}
-                        placeholder='7.8' />
-                </div>
-            </div>
 
-            <div className="event-movie-details-row">
-                <div className="event-movie-details-col-left">
-                    <LabeledInput
-                        label='GENRE'
-                        movieDetailsElementId={'movie-details-genre'}
-                        labelClassName='edit-movie-details-label'
-                        inputClassName='edit-movie-details-input'
-                        value={movie?.relevantGenres || ''}
-                        onChange={(newValue: string) => onUpdate({ key: 'relevantGenres', value: newValue })}
-                        placeholder='Select Genre' />
+                <div className="event-movie-details-row">
+                    <div className="event-movie-details-col-left">
+                        <LabeledInput
+                            inputSettings={{
+                                field: 'relevantGenres',
+                                register: register,
+                                error: formState.errors,
+                                options: {
+                                    required: false
+                                }
+                            }}
+                            label='GENRE'
+                            movieDetailsElementId={'movie-details-genre'}
+                            labelClassName='edit-movie-details-label'
+                            inputClassName='edit-movie-details-input'
+                            placeholder='Select Genre' />
+                    </div>
+                    <div className="event-movie-details-col-right">
+                        <LabeledInput
+                            inputSettings={{
+                                field: 'duration',
+                                register: register,
+                                error: formState.errors,
+                                options: {
+                                    required: true
+                                }
+                            }}
+                            label='RUNTIME'
+                            movieDetailsElementId={'movie-details-duration'}
+                            labelClassName='edit-movie-details-label'
+                            inputClassName='edit-movie-details-input'
+                            placeholder='minutes' />
+                    </div>
                 </div>
-                <div className="event-movie-details-col-right">
-                    <LabeledInput
-                        label='RUNTIME'
-                        movieDetailsElementId={'movie-details-duration'}
-                        labelClassName='edit-movie-details-label'
-                        inputClassName='edit-movie-details-input'
-                        value={movie?.duration || ''}
-                        onChange={(newValue: string) => onUpdate({ key: 'duration', value: newValue })}
-                        placeholder='minutes' />
-                </div>
-            </div>
 
-            <div className="event-movie-details-row">
-                <div className="event-movie-details-col-full">
-                    <LabeledInput
-                        label='OVERVIEW'
-                        movieDetailsElementId={'movie-details-genre'}
-                        labelClassName='edit-movie-details-label'
-                        inputClassName='edit-movie-details-input'
-                        value={movie?.description || ''}
-                        onChange={(newValue: string) => onUpdate({ key: 'description', value: newValue })}
-                        placeholder='Movie Description' />
+                <div className="event-movie-details-row">
+                    <div className="event-movie-details-col-full">
+                        <LabeledInput
+                            inputSettings={{
+                                field: 'description',
+                                register: register,
+                                error: formState.errors,
+                                options: {
+                                    required: true
+                                }
+                            }}
+                            label='OVERVIEW'
+                            movieDetailsElementId={'movie-details-genre'}
+                            labelClassName='edit-movie-details-label'
+                            inputClassName='edit-movie-details-input'
+                            placeholder='Movie Description' />
+                    </div>
                 </div>
-            </div>
 
-            <div className="event-movie-details-action-buttons">
-                <Button
-                    className='event-movie-details-reset-button'
-                    onClick={() => reset()}
-                >
-                    RESET
-                </Button>
-                <Button
-                    className='event-movie-details-submit-button'
-                    onClick={() => triggerAction()}
-                >
-                    SUBMIT
-                </Button>
-            </div>
+                <div className="event-movie-details-action-buttons">
+                    <Button
+                        className='event-movie-details-reset-button'
+                        onClick={(e: any) => {
+                            e.preventDefault()
+                            onReset()
+                        }
+                        }
+                    >
+                        RESET
+                    </Button>
+                    <Button
+                        className='event-movie-details-submit-button'
+                        form='edit-movie-details'
+                        type='submit'
+                    >
+                        SUBMIT
+                    </Button>
+                </div>
+            </form>
         </div>
     </>
 }

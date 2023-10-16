@@ -21,7 +21,6 @@ export function MovieItem(props: any): React.ReactElement {
                         <a onClick={(e) => {
                             e.stopPropagation();
                             props.edit(props.movie.id);
-                            console.log('xxx')
                         }}
                         >Edit</a>
 

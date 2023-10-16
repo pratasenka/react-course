@@ -3,3 +3,7 @@
     flex-direction: column;
 
 }
+
+.labeled-input-error {
+    border: 1px solid red;
+}

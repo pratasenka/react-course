@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { useState } from "react";
-import { useNavigate, useParams, useSearchParams, createSearchParams, Outlet } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, createSearchParams, Outlet, useLocation } from "react-router-dom";
 
 import { MoviesList } from "../movies-list/movies-list";
 import { HeaderSearch } from "../header-search/header-search";
@@ -22,8 +22,10 @@ export interface MovieData {
 const genres = ['documentary', 'comedy', 'horror', 'crime'];
 
 
-export default function MovieListPage(props: any) {
+export default function MovieListPage() {
+    const location = useLocation();
     const navigate = useNavigate();
+
     const { movieId } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -81,7 +83,7 @@ export default function MovieListPage(props: any) {
         fetchMoviesData(abortController.signal);
 
         return () => abortController.abort();
-    }, [searchParams, movieId]);
+    }, [searchParams, movieId, location.pathname]);
 
     return (<>
         <div className="App">

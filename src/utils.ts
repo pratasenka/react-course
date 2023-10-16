@@ -47,3 +47,16 @@ export const transformDtoToMovieData = (movie: MovieDataDTO): MovieData => {
         rating: String(movie.vote_average),
     };
 };
+
+export const getEmptyMovieData = (): MovieData => {
+    return {
+        id: "",
+        name: "",
+        imageUrl: "",
+        releaseYear: "",
+        duration: "",
+        relevantGenres: [],
+        description: "",
+        rating: "",
+    };
+};
