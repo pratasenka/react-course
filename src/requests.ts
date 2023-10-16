@@ -63,7 +63,6 @@ class Request {
         movieId: string,
         signal: AbortSignal
     ): Promise<MovieData | null> {
-        console.log(movieId);
         try {
             const parsedData = await this.get(
                 `${this.HOST}/movies/${movieId}`,

@@ -77,6 +77,7 @@ export function EditMovieDetails(): React.ReactElement {
                                     required: true,
                                     min: 1895,
                                     max: new Date().getFullYear(),
+                                    pattern: /^[0-9\-]+$/i
                                 }
                             }}
                             label='RELEASE DATE'
@@ -113,7 +114,8 @@ export function EditMovieDetails(): React.ReactElement {
                                 options: {
                                     required: true,
                                     min: 0,
-                                    max: 10
+                                    max: 10,
+                                    pattern: /^[0-9\.]+$/i
                                 }
                             }}
                             label='RATING'
@@ -148,7 +150,8 @@ export function EditMovieDetails(): React.ReactElement {
                                 register: register,
                                 error: formState.errors,
                                 options: {
-                                    required: true
+                                    required: true,
+                                    pattern: /^[0-9]+$/i
                                 }
                             }}
                             label='RUNTIME'
