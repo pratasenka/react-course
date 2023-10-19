@@ -13,11 +13,10 @@ export function LabeledInput(props: any): React.ReactElement {
         </label>
         <input
             id={props.movieDetailsElementId}
-            className={props.inputClassName}
+            className={`${props.inputClassName} ${props.inputSettings.error[props.inputSettings.field] ? 'labeled-input-error' : ''}`}
             aria-label={props.ariaLabel}
             placeholder={props.placeholder}
-            value={props.value ? props.value : ''}
-            onChange={(e) => props.onChange(e.target.value)}
+            {...props.inputSettings.register(props.inputSettings.field, props.inputSettings.options)}
         />
     </div>
 }

@@ -1,15 +1,15 @@
 import { render, fireEvent } from "@testing-library/react";
 
 import { MoviesSorting } from "./movies-sorting";
+import { DropdownOption } from "../dropdown/dropdown";
 
 
 describe(MoviesSorting, () => {
-    const options: string[] = ['Title', 'Release Date'];
-
     it("should pass correct option value in 'onClick' callback arguments after a selection value on movies sorting component", () => {
         let selectedOption = '';
         const { getByTestId } = render(
             <MoviesSorting
+                sortBy={'Title'}
                 setSortBy={(option: string) => {
                     selectedOption = option
                 }}
@@ -17,9 +17,9 @@ describe(MoviesSorting, () => {
         );
 
         const option = getByTestId('MoviesSortingSelectDropdown');
-        fireEvent.change(option, { target: { value: options[1] }, }
+        fireEvent.change(option, { target: { value: 'release_date' }, }
         );
 
-        expect(selectedOption).toEqual(options[1].toLowerCase().split(' ').join('_'));
+        expect(selectedOption).toEqual('release_date');
     });
 })
