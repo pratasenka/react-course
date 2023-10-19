@@ -6,6 +6,7 @@ import { MoviesList } from "../movies-list/movies-list";
 import { HeaderSearch } from "../header-search/header-search";
 import { MovieDetails } from "../movie-details/movie-details";
 import { request } from '../../requests';
+import { apiRequest } from "../../api-requests";
 
 
 export interface MovieData {
@@ -34,7 +35,7 @@ export default function MovieListPage() {
 
 
     const fetchMoviesData = async (signal: any) => {
-        const movies: MovieData[] | null = await request.findMoviesByQuery(
+        const movies: MovieData[] | null = await apiRequest.findMoviesByQuery(
             {
                 sortBy: searchParams.get('sortBy') || '',
                 sortOrder: 'asc',
@@ -49,7 +50,7 @@ export default function MovieListPage() {
     }
 
     const fetchMovieData = async (movieId: string, signal: AbortSignal) => {
-        const movie: MovieData | null = await request.findMovieById(movieId, signal);
+        const movie: MovieData | null = await apiRequest.findMovieById(movieId, signal);
         if (movie) setMovieDetails(movie);
     }
 

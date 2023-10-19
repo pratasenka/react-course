@@ -9,6 +9,7 @@ import { Button } from "../button/button";
 import { MovieData } from "../movie-list-page/movie-list-page";
 import { request } from '../../requests';
 import { getEmptyMovieData } from "../../utils";
+import { apiRequest } from "../../api-requests";
 
 export function EditMovieDetails(): React.ReactElement {
     const [defaultMovie, setDefaultMovie] = useState<MovieData>(getEmptyMovieData());
@@ -20,7 +21,7 @@ export function EditMovieDetails(): React.ReactElement {
     const { movieId } = useParams();
 
     const fetchMovieData = async (movieId: string, signal: AbortSignal) => {
-        const movie: MovieData | null = await request.findMovieById(movieId, signal);
+        const movie: MovieData | null = await apiRequest.findMovieById(movieId, signal);
         if (movie) {
             reset({ ...movie });
             setDefaultMovie({ ...movie });
@@ -41,8 +42,8 @@ export function EditMovieDetails(): React.ReactElement {
 
     const onSubmit = async (movie: MovieData) => {
         const newMovie: MovieData | null = movieId ?
-            await request.updateMovieById({ ...movie }) :
-            await request.addMovie({ ...movie });
+            await apiRequest.updateMovieById({ ...movie }) :
+            await apiRequest.addMovie({ ...movie });
 
         if (newMovie) navigate(`/${newMovie.id}`);
     }

@@ -3,6 +3,7 @@ import { render, fireEvent, act } from "@testing-library/react";
 import { EditMovieDetails } from "./edit-movie-details";
 import { MovieData } from "../movie-list-page/movie-list-page";
 import { request } from "../../requests";
+import { apiRequest } from "../../api-requests";
 
 
 const mockedUsedNavigate = jest.fn();
@@ -33,13 +34,13 @@ describe(EditMovieDetails, () => {
         });
 
     const addMovieMock = jest
-        .spyOn(request, 'addMovie')
+        .spyOn(apiRequest, 'addMovie')
         .mockImplementation(async (movie: MovieData): Promise<MovieData | null> => {
             return null;
         });
 
     const findMovieMock = jest
-        .spyOn(request, 'findMovieById')
+        .spyOn(apiRequest, 'findMovieById')
         .mockImplementation(async (movieId: string): Promise<MovieData | null> => {
             return null;
         });
