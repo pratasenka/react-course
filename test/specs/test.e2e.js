@@ -1,6 +1,7 @@
-const { expect, browser, $ } = require('@wdio/globals');
 import { Key } from 'webdriverio';
 const chai = require('chai');
+
+const { expect, browser, $ } = require('@wdio/globals');
 
 describe('App', async () => {
     beforeEach(async () => {

@@ -1,41 +1,40 @@
-import React from "react"
-import { useState } from "react"
+import React from 'react';
 
-import "./dropdown.css";
+import './dropdown.css';
 
 export interface DropdownOption {
-    id: string;
-    name: string;
-    value: string;
+  id: string;
+  name: string;
+  value: string;
 }
 
-
 export function Dropdown(props: any): React.ReactElement {
-
-    return <div className="">
-        <div className="">
-            <select
-                name="dropdown-select"
-                data-testid="MoviesSortingSelectDropdown"
-                onChange={(e) => props.onClick(e.target.value)}
-                defaultValue={props.selected}
-            >
-                <option
-                    value=""
-                >
-                    Custom select....
-                </option>
-                {
-                    props.options?.map((option: DropdownOption) => {
-                        return <option
-                            key={option.id}
-                            value={option.value}
-                        >
-                            {option.name}
-                        </option>
-                    })
+  return (
+    <div className="">
+      <div className="">
+        <select
+          name="dropdown-select"
+          data-testid="MoviesSortingSelectDropdown"
+          onChange={(e) => props.onClick(e.target.value)}
+          defaultValue={props.selected}
+        >
+          <option
+            value=""
+          >
+            Custom select....
+          </option>
+          {
+                    props.options?.map((option: DropdownOption) => (
+                      <option
+                        key={option.id}
+                        value={option.value}
+                      >
+                        {option.name}
+                      </option>
+                    ))
                 }
-            </select>
-        </div>
+        </select>
+      </div>
     </div>
+  );
 }
