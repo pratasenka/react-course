@@ -1,40 +1,19 @@
-import { MovieData } from "./components/movie-list-page/movie-list-page";
-import { request } from "./requests";
+import { request } from './requests';
+import { FindMoviesParams, MovieData } from './types';
 import {
     constructUrl,
     transformDtoToMovieData,
     transformMovieDataToDto,
-} from "./utils";
-
-export interface FindMoviesParams {
-    search: string;
-    filter: string;
-    sortBy: string;
-    sortOrder: string;
-    searchBy: string;
-}
-
-export interface MovieDataDTO {
-    id: string;
-    title: string;
-    poster_path: string;
-    release_date: string;
-    runtime: number;
-    genres: string[];
-    overview: string;
-    vote_average: number;
-}
+} from './utils';
 
 class APIRequest {
-    private readonly HOST = "http://localhost:4000";
-
-    constructor() {}
+    private readonly HOST = 'http://localhost:4000';
 
     async updateMovieById(movie: MovieData): Promise<MovieData | null> {
         try {
             const putResult: any = await request.put(
                 `${this.HOST}/movies`,
-                transformMovieDataToDto(movie)
+                transformMovieDataToDto(movie),
             );
 
             return transformDtoToMovieData(putResult);
@@ -46,11 +25,10 @@ class APIRequest {
 
     async addMovie(movie: MovieData): Promise<MovieData | null> {
         try {
-            const { id: string, ...addMovieData } =
-                transformMovieDataToDto(movie);
+            const { id: string, ...addMovieData } = transformMovieDataToDto(movie);
             const postResult: any = await request.post(
                 `${this.HOST}/movies`,
-                addMovieData
+                addMovieData,
             );
 
             return transformDtoToMovieData(postResult);
@@ -62,18 +40,18 @@ class APIRequest {
 
     async findMovieById(
         movieId: string,
-        signal: AbortSignal
+        signal: AbortSignal,
     ): Promise<MovieData | null> {
         try {
             const parsedData = await request.get(
                 `${this.HOST}/movies/${movieId}`,
-                signal
+                signal,
             );
 
             return transformDtoToMovieData(parsedData);
         } catch (error: any) {
-            if (error.name === "AbortError") {
-                console.log("Request Aborted!");
+            if (error.name === 'AbortError') {
+                console.log('Request Aborted!');
             }
             return null;
         }
@@ -81,20 +59,20 @@ class APIRequest {
 
     async findMoviesByQuery(
         searchParams: FindMoviesParams,
-        signal: AbortSignal
+        signal: AbortSignal,
     ): Promise<MovieData[] | null> {
         try {
             const parsedData = await request.get(
                 constructUrl(`${this.HOST}/movies`, searchParams),
-                signal
+                signal,
             );
 
-            return parsedData.data.map((movie: any): MovieData => {
-                return transformDtoToMovieData(movie);
-            });
+            return parsedData.data.map(
+                (movie: any): MovieData => transformDtoToMovieData(movie),
+            );
         } catch (error: any) {
-            if (error.name === "AbortError") {
-                console.log("Request Aborted!");
+            if (error.name === 'AbortError') {
+                console.log('Request Aborted!');
             }
             return null;
         }

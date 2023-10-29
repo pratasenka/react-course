@@ -1,0 +1,42 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "jest": true
+    },
+    "extends": [
+        "react-app",
+        "react-app/jest",
+        "airbnb",
+        "airbnb-typescript",
+        "plugin:import/typescript"
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+    },
+    "rules": {
+        "indent": "off",
+        "@typescript-eslint/indent": "off",
+        "class-methods-use-this": "off",
+        "react/button-has-type": "off",
+        "react/destructuring-assignment": "off",
+        "react/jsx-props-no-spreading": "off",
+        "import/prefer-default-export": "off",
+
+        "@typescript-eslint/no-shadow": "off",
+        "no-return-assign": "off",
+
+        "testing-library/no-node-access": "off",
+        "testing-library/no-container": "off",
+        "testing-library/prefer-screen-queries": "off",
+        "testing-library/no-unnecessary-act": "off"
+    },
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx"]
+        }
+    ]
+}

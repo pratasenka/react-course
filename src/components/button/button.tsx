@@ -1,10 +1,11 @@
-import React from "react"
-
+import React from 'react';
 
 export function Button(props: any): React.ReactElement {
-    return <button
-        {...props}
+  return (
+    <button
+      {...props}
     >
-        {props.children}
+      {props.children}
     </button>
+  );
 }

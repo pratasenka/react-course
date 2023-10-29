@@ -3,16 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test-jest": "jest --All",
+    "start": "webpack serve --watch --config webpack.config.js",
+    "dev": "NODE_ENV=development webpack serve --config webpack.config.js",
+    "build": "NODE_ENV=production webpack --config webpack.config.js",
+    "build:dev": "NODE_ENV=development webpack --config webpack.config.js",
+    "build:watch": "NODE_ENV=development node ./node_modules/webpack/bin/webpack.js --config webpack.config.js --watch",
+    "cra-start": "react-scripts start",
+    "cra-build": "react-scripts build",
+    "test": "jest --All",
     "eject": "react-scripts eject",
     "wdio": "wdio run ./wdio.conf.js",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "lint": "eslint --ext .ts,.tsx .",
+    "lint:fix": "eslint --fix --ext .ts,.tsx .",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
     "nanoid": "^5.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -45,27 +53,34 @@
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@types/react-portal": "^4.0.4",
+    "@typescript-eslint/parser": "^5.62.0",
     "@wdio/cli": "^8.16.6",
     "@wdio/local-runner": "^8.16.6",
     "@wdio/mocha-framework": "^8.16.3",
     "@wdio/spec-reporter": "^8.16.3",
     "babel-plugin-named-exports-order": "^0.0.2",
     "chai": "^4.3.8",
+    "clean-webpack-plugin": "^4.0.0",
+    "eslint": "^8.52.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.13",
+    "html-webpack-plugin": "^5.5.3",
+    "husky": "^8.0.3",
     "jest": "^29.6.4",
     "jest-environment-jsdom": "^29.6.4",
+    "mini-css-extract-plugin": "^2.7.6",
     "prop-types": "^15.8.1",
     "storybook": "^7.4.1",
+    "style-loader": "^3.3.3",
     "ts-jest": "^29.1.1",
     "wdio-wait-for": "^3.0.6",
-    "webpack": "^5.88.2"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "plugin:storybook/recommended"
-    ]
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
   },
   "browserslist": {
     "production": [
